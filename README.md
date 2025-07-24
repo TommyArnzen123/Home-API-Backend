@@ -24,6 +24,8 @@ Step Four - Build out the backend application’s initial functionality.
 Future
 - Add functionality to the registration endpoints.
   - Build out PostgreSQL database tables.
+    - UserEntity - Used for registering users and logging users into the application. (COMPLETE)
+  - Add encryption to the password field in the UserEntity table.
 - Build out the login endpoint.
 - Build out the get home information endpoint.
 - Build out the get location (room) information endpoint.
