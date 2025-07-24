@@ -3,6 +3,7 @@ The Backend Spring Boot Application for the Home API Application.
 
 
 Step One - Generate GitHub repositories for the frontend and backend applications. (COMPLETE)\
+
 Step Two - Generate Java/Spring Boot application and store it in the backend GitHub repository. (COMPLETE)
 - Initial dependencies needed
 - Spring Web
