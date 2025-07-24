@@ -19,6 +19,11 @@ Step Four - Build out the backend application’s initial functionality.
   - Home (COMPLETE)
   - Location (Room) (RYAN)
   - Device (RYAN)
+
+
+Future
+- Add functionality to the registration endpoints.
+  - Build out PostgreSQL database tables.
 - Build out the login endpoint.
 - Build out the get home information endpoint.
 - Build out the get location (room) information endpoint.
