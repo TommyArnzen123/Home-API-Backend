@@ -1,6 +1,6 @@
 package com.arnzen.home_api_backend.service;
 
-import com.arnzen.home_api_backend.dao.RegistrationDao;
+import com.arnzen.home_api_backend.dao.UserDao;
 import com.arnzen.home_api_backend.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 public class RegistrationService {
 
     @Autowired
-    RegistrationDao registrationDao;
+    UserDao userDao;
 
     public ResponseEntity<UserEntity> registerUser(UserEntity user) {
-        UserEntity newUser = registrationDao.save(user);
+        UserEntity newUser = userDao.save(user);
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 }
