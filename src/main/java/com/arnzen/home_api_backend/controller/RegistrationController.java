@@ -10,8 +10,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("register")
 public class RegistrationController {
 
+    // Allow a new user to be registered with the application.
     @PostMapping("user")
     public ResponseEntity<String> registerUser() {
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+        return new ResponseEntity<>("User registered", HttpStatus.OK);
     }
+
+    // Allow a new home to be registered and associated with a registered user.
+    @PostMapping("home")
+    public ResponseEntity<String> registerHome() {
+        return new ResponseEntity<>("Home registered", HttpStatus.OK);
+    }
+
+    // Allow a new location to be registered and associated with a registered home.
+
+
+    // Allow a new device to be registered and associated with a registered location.
+
 }
