@@ -1,5 +1,7 @@
 package com.arnzen.home_api_backend.controller;
 
+import com.arnzen.home_api_backend.model.HomeEntity;
+import com.arnzen.home_api_backend.model.RegisterHomeInfo;
 import com.arnzen.home_api_backend.service.RegistrationService;
 import com.arnzen.home_api_backend.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +27,8 @@ public class RegistrationController {
 
     // Allow a new home to be registered and associated with a registered user.
     @PostMapping("home")
-    public ResponseEntity<String> registerHome() {
-        return new ResponseEntity<>("Home registered", HttpStatus.OK);
+    public ResponseEntity<HomeEntity> registerHome(@RequestBody RegisterHomeInfo home) {
+        return registrationService.registerHome(home);
     }
 
     // Allow a new location to be registered and associated with a registered home.
