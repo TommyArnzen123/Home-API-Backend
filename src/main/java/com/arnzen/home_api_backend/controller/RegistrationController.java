@@ -30,8 +30,15 @@ public class RegistrationController {
     }
 
     // Allow a new location to be registered and associated with a registered home.
-
+    @PostMapping("location")
+    public ResponseEntity<String> registerLocation() {
+        return new ResponseEntity<>("Location registered", HttpStatus.OK);
+    }
 
     // Allow a new device to be registered and associated with a registered location.
+    @PostMapping("device")
+    public ResponseEntity<String> registerDevice() {
+        return new ResponseEntity<>("Device registered", HttpStatus.OK);
+    }
 
 }
