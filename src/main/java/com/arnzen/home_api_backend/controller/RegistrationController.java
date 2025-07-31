@@ -1,9 +1,15 @@
 package com.arnzen.home_api_backend.controller;
 
+import com.arnzen.home_api_backend.model.UserEntity;
 import com.arnzen.home_api_backend.model.HomeEntity;
+import com.arnzen.home_api_backend.model.LocationEntity;
+import com.arnzen.home_api_backend.model.DeviceEntity;
+
 import com.arnzen.home_api_backend.model.RegisterHomeInfo;
 import com.arnzen.home_api_backend.service.RegistrationService;
-import com.arnzen.home_api_backend.model.UserEntity;
+import com.arnzen.home_api_backend.model.RegisterLocationInfo;
+import com.arnzen.home_api_backend.model.RegisterDeviceInfo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("register")
@@ -33,14 +40,14 @@ public class RegistrationController {
 
     // Allow a new location to be registered and associated with a registered home.
     @PostMapping("location")
-    public ResponseEntity<String> registerLocation() {
-        return new ResponseEntity<>("Location registered", HttpStatus.OK);
+    public ResponseEntity<LocationEntity> registerLocation(@RequestBody RegisterLocationInfo location) {
+        return registrationService.registerLocation(location);
     }
+
 
     // Allow a new device to be registered and associated with a registered location.
     @PostMapping("device")
-    public ResponseEntity<String> registerDevice() {
-        return new ResponseEntity<>("Device registered", HttpStatus.OK);
+    public ResponseEntity<DeviceEntity> registerDevice(@RequestBody RegisterDeviceInfo device) {
+        return registrationService.registerDevice(device);
     }
-
 }
