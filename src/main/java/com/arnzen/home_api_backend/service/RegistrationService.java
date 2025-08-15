@@ -62,7 +62,7 @@ public class RegistrationService {
             return new ResponseEntity<>(newLocation, HttpStatus.OK);
         } else {
 
-            // The user was not found in the database.
+            // The home was not found in the database.
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -77,7 +77,7 @@ public class RegistrationService {
             return new ResponseEntity<>(newDevice, HttpStatus.OK);
         } else {
 
-            // The user was not found in the database.
+            // The location was not found in the database.
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
