@@ -17,12 +17,12 @@ public class LoginService {
     UserDao userDao;
 
     public ResponseEntity<String> login(LoginUserInfo loginUserInfo) {
-        List<UserEntity> userEntity = userDao.findByUsername(loginUserInfo.getUsername());
+        UserEntity userEntity = userDao.findByUsername(loginUserInfo.getUsername());
 
-        if (userEntity.isEmpty()) {
+        if (userEntity == null) {
             return new ResponseEntity<>("Username not found.", HttpStatus.BAD_REQUEST);
         } else {
-            if (userEntity.get(0).getPassword().equals(loginUserInfo.getPassword())) {
+            if (userEntity.getPassword().equals(loginUserInfo.getPassword())) {
                 return new ResponseEntity<>("Success - user logged in.", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Incorrect username/password combination.", HttpStatus.BAD_REQUEST);
