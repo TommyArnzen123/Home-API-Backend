@@ -14,6 +14,7 @@ import com.arnzen.home_api_backend.model.RegisterDeviceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
@@ -32,7 +33,10 @@ public class RegistrationService {
     @Autowired
     DeviceDao deviceDao;
 
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
     public ResponseEntity<UserEntity> registerUser(UserEntity user) {
+        user.setPassword(encoder.encode(user.getPassword()));
         UserEntity newUser = userDao.save(user);
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
