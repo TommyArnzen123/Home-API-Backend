@@ -1,7 +1,6 @@
 package com.arnzen.home_api_backend.controller;
 
-import com.arnzen.home_api_backend.model.DeviceEntity;
-import com.arnzen.home_api_backend.model.HomeEntity;
+import com.arnzen.home_api_backend.model.*;
 import com.arnzen.home_api_backend.service.GetInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,12 +20,19 @@ public class GetInfoController {
     GetInfoService getInfoService;
 
     @GetMapping("homesByUser/{userId}")
-    private ResponseEntity<List<HomeEntity>> getHomesByUser(@PathVariable int userId) {
+    public ResponseEntity<List<GetHomeResponse>> getHomesByUser(@PathVariable int userId) {
         return getInfoService.getHomesByUser(userId);
     }
 
+    // Locations by homeId.
+
     @GetMapping("devicesByLocation/{locationId}")
-    private ResponseEntity<List<DeviceEntity>> getDevicesByLocation(@PathVariable int locationId) {
+    public ResponseEntity<List<GetDeviceResponse>> getDevicesByLocation(@PathVariable int locationId) {
         return getInfoService.getDevicesByLocation(locationId);
+    }
+
+    @GetMapping("temperaturesByDeviceCurrentDay/{deviceId}")
+    public ResponseEntity<List<GetTemperatureResponse>> getTemperaturesByDeviceCurrentDay(@PathVariable int deviceId) {
+        return getInfoService.getTemperaturesByDevice(deviceId);
     }
 }
