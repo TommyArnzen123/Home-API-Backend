@@ -15,6 +15,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -31,6 +35,18 @@ public class SecurityConfig {
 		provider.setUserDetailsService(userDetailsService);
 		provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
 		return provider;
+	}
+
+	@Bean
+	public CorsFilter corsFilter() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true); // Allow sending cookies/authentication headers
+		config.addAllowedOrigin("http://localhost:4200"); // Replace with your Angular app's origin
+		config.addAllowedHeader("*"); // Allow all headers
+		config.addAllowedMethod("*"); // Allow all HTTP methods (GET, POST, PUT, DELETE, OPTIONS, etc.)
+		source.registerCorsConfiguration("/**", config); // Apply to all paths
+		return new CorsFilter(source);
 	}
 	
 

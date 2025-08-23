@@ -13,6 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 public class LoginController {
     @Autowired
@@ -25,13 +28,16 @@ public class LoginController {
     AuthenticationManager authenticationManager;
 
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody LoginUserInfo loginUserInfo) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginUserInfo loginUserInfo) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginUserInfo.getUsername(), loginUserInfo.getPassword()));
 
-        if(authentication.isAuthenticated())
-            return new ResponseEntity<>(jwtService.generateToken(loginUserInfo.getUsername()), HttpStatus.OK);
-        else
-            return new ResponseEntity<>("Login Failed", HttpStatus.BAD_REQUEST);
+        if(authentication.isAuthenticated()) {
+            Map<String, String> loginResponse = new HashMap<>();
+            loginResponse.put("jwtToken", jwtService.generateToken(loginUserInfo.getUsername()));
+            return new ResponseEntity<>(loginResponse, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 }
