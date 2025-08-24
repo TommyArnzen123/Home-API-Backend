@@ -3,6 +3,7 @@ package com.arnzen.home_api_backend.service;
 import com.arnzen.home_api_backend.dao.DeviceDao;
 import com.arnzen.home_api_backend.dao.HomeDao;
 import com.arnzen.home_api_backend.dao.TemperatureDao;
+import com.arnzen.home_api_backend.dao.UserDao;
 import com.arnzen.home_api_backend.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,9 +14,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GetInfoService {
+
+    @Autowired
+    UserDao userDao;
 
     @Autowired
     HomeDao homeDao;
@@ -25,6 +30,10 @@ public class GetInfoService {
 
     @Autowired
     TemperatureDao temperatureDao;
+
+    public UserEntity getUserEntityByUsername(String username) {
+        return userDao.findByUsername(username);
+    }
 
     public ResponseEntity<List<GetHomeResponse>> getHomesByUser(int userId) {
         List<HomeEntity> homes = homeDao.findByUserEntityId(userId);

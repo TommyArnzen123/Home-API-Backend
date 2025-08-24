@@ -1,8 +1,9 @@
 package com.arnzen.home_api_backend.controller;
 
 import com.arnzen.home_api_backend.model.LoginUserInfo;
+import com.arnzen.home_api_backend.model.UserEntity;
+import com.arnzen.home_api_backend.service.GetInfoService;
 import com.arnzen.home_api_backend.service.JwtService;
-import com.arnzen.home_api_backend.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,9 @@ import java.util.Map;
 
 @Controller
 public class LoginController {
+
     @Autowired
-    LoginService loginService;
+    private GetInfoService getInfoService;
 
     @Autowired
     private JwtService jwtService;
@@ -33,8 +35,15 @@ public class LoginController {
                 .authenticate(new UsernamePasswordAuthenticationToken(loginUserInfo.getUsername(), loginUserInfo.getPassword()));
 
         if(authentication.isAuthenticated()) {
+
+            UserEntity userEntity = getInfoService.getUserEntityByUsername(loginUserInfo.getUsername());
+
+
             Map<String, String> loginResponse = new HashMap<>();
             loginResponse.put("jwtToken", jwtService.generateToken(loginUserInfo.getUsername()));
+            loginResponse.put("userId", Integer.toString(userEntity.getId()));
+            loginResponse.put("username", userEntity.getUsername());
+            loginResponse.put("firstName", userEntity.getFirstName());
             return new ResponseEntity<>(loginResponse, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
