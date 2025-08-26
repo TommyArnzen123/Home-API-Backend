@@ -21,10 +21,25 @@ public class GetInfoController {
 
     @GetMapping("homesByUser/{userId}")
     public ResponseEntity<List<GetHomeResponse>> getHomesByUser(@PathVariable int userId) {
-        return getInfoService.getHomesByUser(userId);
+        List<GetHomeResponse> homes = getInfoService.getHomesByUser(userId);
+
+        if (homes.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(homes, HttpStatus.OK);
+        }
     }
 
-    // Locations by homeId.
+    @GetMapping("locationByHome/{homeId}")
+    public ResponseEntity<List<GetLocationResponse>> getLocationsByHome(@PathVariable int homeId){
+        List<GetLocationResponse> locations = getInfoService.getLocationsByHome(homeId);
+
+        if (locations.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(locations, HttpStatus.OK);
+        }
+    }
 
     @GetMapping("devicesByLocation/{locationId}")
     public ResponseEntity<List<GetDeviceResponse>> getDevicesByLocation(@PathVariable int locationId) {
@@ -34,5 +49,30 @@ public class GetInfoController {
     @GetMapping("temperaturesByDeviceCurrentDay/{deviceId}")
     public ResponseEntity<List<GetTemperatureResponse>> getTemperaturesByDeviceCurrentDay(@PathVariable int deviceId) {
         return getInfoService.getTemperaturesByDevice(deviceId);
+    }
+
+    @GetMapping("homeScreenInfo/{userId}")
+    public ResponseEntity<HomeScreenInfoResponseEntity> getHomeScreenInfo(@PathVariable int userId) {
+
+        HomeScreenInfoResponseEntity homeScreenInfoResponseEntity = new HomeScreenInfoResponseEntity();
+
+        int totalLocations = 0;
+        int totalDevices = 0;
+
+        List<GetHomeResponse> homes = getInfoService.getHomesByUser(userId);
+
+
+        // Get the home information.
+        homeScreenInfoResponseEntity.setHomes(homes);
+
+        // Get the location information.
+        homeScreenInfoResponseEntity.setNumLocations(totalLocations);
+
+        // Get the device information.
+        homeScreenInfoResponseEntity.setNumDevices(totalDevices);
+
+
+
+        return new ResponseEntity<>(homeScreenInfoResponseEntity, HttpStatus.OK);
     }
 }
