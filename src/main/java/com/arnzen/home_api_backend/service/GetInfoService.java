@@ -69,12 +69,12 @@ public class GetInfoService {
         }
     }
 
-    public ResponseEntity<List<GetDeviceResponse>> getDevicesByLocation(int locationId) {
+    public List<GetDeviceResponse> getDevicesByLocation(int locationId) {
 
         List<DeviceEntity> devices = deviceDao.findByLocationEntityId(locationId);
 
         if (devices.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return null;
         } else {
 
             List<GetDeviceResponse> devicesResponse = new ArrayList<>();
@@ -84,8 +84,7 @@ public class GetInfoService {
                 devicesResponse.add(getDeviceResponse);
             });
 
-
-            return new ResponseEntity<>(devicesResponse, HttpStatus.OK);
+            return devicesResponse;
         }
     }
 

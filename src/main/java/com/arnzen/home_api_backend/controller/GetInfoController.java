@@ -43,7 +43,13 @@ public class GetInfoController {
 
     @GetMapping("devicesByLocation/{locationId}")
     public ResponseEntity<List<GetDeviceResponse>> getDevicesByLocation(@PathVariable int locationId) {
-        return getInfoService.getDevicesByLocation(locationId);
+        List<GetDeviceResponse> devices = getInfoService.getDevicesByLocation(locationId);
+
+        if (devices.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(devices, HttpStatus.OK);
+        }
     }
 
     @GetMapping("temperaturesByDeviceCurrentDay/{deviceId}")
@@ -60,6 +66,19 @@ public class GetInfoController {
         int totalDevices = 0;
 
         List<GetHomeResponse> homes = getInfoService.getHomesByUser(userId);
+
+        for (GetHomeResponse home : homes){
+            List<GetLocationResponse> locations = getInfoService.getLocationsByHome(home.getHomeId());
+
+            for (GetLocationResponse location : locations) {
+                List<GetDeviceResponse> devices = getInfoService.getDevicesByLocation(location.getLocationId());
+
+                totalDevices += devices.size();
+            }
+
+
+            totalLocations += locations.size();
+        };
 
 
         // Get the home information.
