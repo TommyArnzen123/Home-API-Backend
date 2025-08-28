@@ -11,6 +11,7 @@ import com.arnzen.home_api_backend.model.DeviceEntity;
 import com.arnzen.home_api_backend.model.RegisterHomeInfo;
 import com.arnzen.home_api_backend.model.RegisterLocationInfo;
 import com.arnzen.home_api_backend.model.RegisterDeviceInfo;
+import org.apache.catalina.valves.rewrite.InternalRewriteMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,8 @@ public class RegistrationService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public ResponseEntity<UserEntity> registerUser(UserEntity user) {
-        UserEntity checkUser = userDao.findByUsername(user.getUsername());
+        string normalizedUser = user.getUsername().toLowerCase()
+        UserEntity checkUser = userDao.findByUsername(normalizedUser);
         if (checkUser != null) {
             return new ResponseEntity<>("Existing User Found", HttpStatus.CONFLICT);
         }
