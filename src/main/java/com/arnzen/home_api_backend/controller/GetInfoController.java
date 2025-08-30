@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -67,18 +69,24 @@ public class GetInfoController {
 
         List<GetHomeResponse> homes = getInfoService.getHomesByUser(userId);
 
-        for (GetHomeResponse home : homes){
-            List<GetLocationResponse> locations = getInfoService.getLocationsByHome(home.getHomeId());
+        if (homes != null) {
+            for (GetHomeResponse home : homes){
+                List<GetLocationResponse> locations = getInfoService.getLocationsByHome(home.getHomeId());
 
-            for (GetLocationResponse location : locations) {
-                List<GetDeviceResponse> devices = getInfoService.getDevicesByLocation(location.getLocationId());
+                if (locations != null) {
+                    for (GetLocationResponse location : locations) {
+                        List<GetDeviceResponse> devices = getInfoService.getDevicesByLocation(location.getLocationId());
 
-                totalDevices += devices.size();
-            }
+                        totalDevices += devices.size();
+                    }
 
 
-            totalLocations += locations.size();
-        };
+                    totalLocations += locations.size();
+                }
+            };
+        } else {
+            homes = new ArrayList<>();
+        }
 
 
         // Get the home information.
