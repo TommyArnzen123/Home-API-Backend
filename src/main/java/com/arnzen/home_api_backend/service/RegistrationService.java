@@ -36,6 +36,11 @@ public class RegistrationService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public ResponseEntity<UserEntity> registerUser(UserEntity user) {
+        string normalizedUser = user.getUsername().toLowerCase()
+        UserEntity checkUser = userDao.findByUsername(normalizedUser);
+        if (checkUser != null) {
+            return new ResponseEntity<>("Existing User Found", HttpStatus.CONFLICT);
+        }
         user.setPassword(encoder.encode(user.getPassword()));
         UserEntity newUser = userDao.save(user);
         return new ResponseEntity<>(newUser, HttpStatus.OK);

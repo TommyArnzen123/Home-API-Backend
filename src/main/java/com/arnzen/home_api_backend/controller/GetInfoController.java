@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -45,13 +43,7 @@ public class GetInfoController {
 
     @GetMapping("devicesByLocation/{locationId}")
     public ResponseEntity<List<GetDeviceResponse>> getDevicesByLocation(@PathVariable int locationId) {
-        List<GetDeviceResponse> devices = getInfoService.getDevicesByLocation(locationId);
-
-        if (devices.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(devices, HttpStatus.OK);
-        }
+        return getInfoService.getDevicesByLocation(locationId);
     }
 
     @GetMapping("temperaturesByDeviceCurrentDay/{deviceId}")
@@ -68,25 +60,6 @@ public class GetInfoController {
         int totalDevices = 0;
 
         List<GetHomeResponse> homes = getInfoService.getHomesByUser(userId);
-
-        if (homes != null) {
-            for (GetHomeResponse home : homes){
-                List<GetLocationResponse> locations = getInfoService.getLocationsByHome(home.getHomeId());
-
-                if (locations != null) {
-                    for (GetLocationResponse location : locations) {
-                        List<GetDeviceResponse> devices = getInfoService.getDevicesByLocation(location.getLocationId());
-
-                        totalDevices += devices.size();
-                    }
-
-
-                    totalLocations += locations.size();
-                }
-            };
-        } else {
-            homes = new ArrayList<>();
-        }
 
 
         // Get the home information.
