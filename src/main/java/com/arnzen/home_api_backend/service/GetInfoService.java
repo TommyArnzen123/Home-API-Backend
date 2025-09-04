@@ -31,7 +31,7 @@ public class GetInfoService {
     TemperatureDao temperatureDao;
 
     public UserEntity getUserEntityByUsername(String username) {
-        return userDao.findByUsername(username);
+        return userDao.findByUsernameIgnoreCase(username);
     }
 
     public List<GetHomeResponse> getHomesByUser(int userId) {
