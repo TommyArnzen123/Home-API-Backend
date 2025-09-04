@@ -30,7 +30,7 @@ public class GetInfoController {
         }
     }
 
-    @GetMapping("locationByHome/{homeId}")
+    @GetMapping("locationsByHome/{homeId}")
     public ResponseEntity<List<GetLocationResponse>> getLocationsByHome(@PathVariable int homeId){
         List<GetLocationResponse> locations = getInfoService.getLocationsByHome(homeId);
 
