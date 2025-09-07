@@ -3,6 +3,8 @@ package com.arnzen.home_api_backend.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -20,11 +22,11 @@ public class TemperatureEntity {
     // Temperature in fahrenheit.
     private double temperature;
 
-    private LocalDate dateRecorded;
+    private LocalDateTime dateRecorded;
 
     public TemperatureEntity() {}
 
-    public TemperatureEntity(int id, DeviceEntity deviceEntity, double temperature, LocalDate dateRecorded) {
+    public TemperatureEntity(int id, DeviceEntity deviceEntity, double temperature, LocalDateTime dateRecorded) {
         this.id = id;
         this.deviceEntity = deviceEntity;
         this.temperature = temperature;
@@ -55,11 +57,11 @@ public class TemperatureEntity {
         this.temperature = temperature;
     }
 
-    public LocalDate getDateRecorded() {
+    public LocalDateTime getDateRecorded() {
         return dateRecorded;
     }
 
-    public void setDateRecorded(LocalDate dateRecorded) {
+    public void setDateRecorded(LocalDateTime dateRecorded) {
         this.dateRecorded = dateRecorded;
     }
 }

@@ -55,7 +55,7 @@ public class SecurityConfig {
 
 		http.csrf(customizer -> customizer.disable())
 				.authorizeHttpRequests(request -> request
-						.requestMatchers("register/user", "login", "temperature/save", "getInfo/homeScreenInfo/*")
+						.requestMatchers("register/user", "login", "temperature/save", "getInfo/homeScreenInfo/*", "getInfo/locationsByHome/*" , "getInfo/informationByDeviceCurrentDay/*")
 						.permitAll()
 						.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

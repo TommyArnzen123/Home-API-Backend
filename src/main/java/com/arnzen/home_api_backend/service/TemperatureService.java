@@ -8,8 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -27,7 +26,7 @@ public class TemperatureService {
             TemperatureEntity temperature = new TemperatureEntity();
             temperature.setDeviceEntity(device.get());
             temperature.setTemperature(registerTemperatureInfo.getTemperature());
-            temperature.setDateRecorded(LocalDate.now());
+            temperature.setDateRecorded(LocalDateTime.now());
             TemperatureEntity newTemperature = temperatureDao.save(temperature);
             return new ResponseEntity<>(newTemperature, HttpStatus.OK);
         } else {

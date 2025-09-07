@@ -46,9 +46,16 @@ public class GetInfoController {
         return getInfoService.getDevicesByLocation(locationId);
     }
 
-    @GetMapping("temperaturesByDeviceCurrentDay/{deviceId}")
-    public ResponseEntity<List<GetTemperatureResponse>> getTemperaturesByDeviceCurrentDay(@PathVariable int deviceId) {
-        return getInfoService.getTemperaturesByDevice(deviceId);
+    @GetMapping("informationByDeviceCurrentDay/{deviceId}")
+    public ResponseEntity<ViewDeviceResponse> getInformationByDeviceCurrentDay(@PathVariable int deviceId) {
+
+        ViewDeviceResponse viewDeviceResponse = getInfoService.getTemperaturesByDeviceCurrentDay(deviceId);
+
+        if (viewDeviceResponse == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(viewDeviceResponse, HttpStatus.OK);
+        }
     }
 
     @GetMapping("homeScreenInfo/{userId}")
