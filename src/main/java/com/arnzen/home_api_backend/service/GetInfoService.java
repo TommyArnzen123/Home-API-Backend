@@ -124,6 +124,7 @@ public class GetInfoService {
             viewDeviceResponse.setMostRecentTemperatureAvailable(false);
         } else {
             viewDeviceResponse.setMostRecentTemperature(mostRecentTemperature.getTemperature());
+            viewDeviceResponse.setMostRecentTemperatureAvailableDateTime(mostRecentTemperature.getDateRecorded());
             viewDeviceResponse.setMostRecentTemperatureAvailable(true);
         }
 
