@@ -1,5 +1,6 @@
 package com.arnzen.home_api_backend.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ViewDeviceResponse {
@@ -7,16 +8,18 @@ public class ViewDeviceResponse {
     int locationId;
     String deviceName;
     double mostRecentTemperature;
+    LocalDateTime mostRecentTemperatureAvailableDateTime;
     boolean mostRecentTemperatureAvailable;
     List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay;
 
     public ViewDeviceResponse() {}
 
-    public ViewDeviceResponse(int deviceId, int locationId, String deviceName, double mostRecentTemperature, boolean mostRecentTemperatureAvailable, List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay) {
+    public ViewDeviceResponse(int deviceId, int locationId, String deviceName, double mostRecentTemperature, LocalDateTime mostRecentTemperatureAvailableDateTime, boolean mostRecentTemperatureAvailable, List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay) {
         this.deviceId = deviceId;
         this.locationId = locationId;
         this.deviceName = deviceName;
         this.mostRecentTemperature = mostRecentTemperature;
+        this.mostRecentTemperatureAvailableDateTime = mostRecentTemperatureAvailableDateTime;
         this.mostRecentTemperatureAvailable = mostRecentTemperatureAvailable;
         this.averageTemperaturesByHourCurrentDay = averageTemperaturesByHourCurrentDay;
     }
@@ -67,5 +70,13 @@ public class ViewDeviceResponse {
 
     public void setMostRecentTemperatureAvailable(boolean mostRecentTemperatureAvailable) {
         this.mostRecentTemperatureAvailable = mostRecentTemperatureAvailable;
+    }
+
+    public LocalDateTime getMostRecentTemperatureAvailableDateTime() {
+        return mostRecentTemperatureAvailableDateTime;
+    }
+
+    public void setMostRecentTemperatureAvailableDateTime(LocalDateTime mostRecentTemperatureAvailableDateTime) {
+        this.mostRecentTemperatureAvailableDateTime = mostRecentTemperatureAvailableDateTime;
     }
 }
