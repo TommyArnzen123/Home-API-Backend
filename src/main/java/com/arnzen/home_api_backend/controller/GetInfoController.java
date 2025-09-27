@@ -43,7 +43,13 @@ public class GetInfoController {
 
     @GetMapping("devicesByLocation/{locationId}")
     public ResponseEntity<List<GetDeviceResponse>> getDevicesByLocation(@PathVariable int locationId) {
-        return getInfoService.getDevicesByLocation(locationId);
+        List<GetDeviceResponse> devices = getInfoService.getDevicesByLocation(locationId);
+
+        if (devices.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(devices, HttpStatus.OK);
+        }
     }
 
     @GetMapping("informationByDeviceCurrentDay/{deviceId}")

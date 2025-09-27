@@ -76,23 +76,29 @@ public class GetInfoService {
         }
     }
 
-    public ResponseEntity<List<GetDeviceResponse>> getDevicesByLocation(int locationId) {
+    public List<GetDeviceResponse> getDevicesByLocation(int locationId) {
 
         List<DeviceEntity> devices = deviceDao.findByLocationEntityId(locationId);
 
         if (devices.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return null;
         } else {
 
             List<GetDeviceResponse> devicesResponse = new ArrayList<>();
 
             devices.forEach(device -> {
-                GetDeviceResponse getDeviceResponse = new GetDeviceResponse(device.getId(), device.getLocationEntity().getId(), device.getDeviceName());
+
+                // Get the most recent temperature value recorded for the device.
+                TemperatureEntity mostRecentTemperature = temperatureDao.getMostRecentTemperatureByDeviceId(device.getId());
+
+                GetTemperatureResponse temperatureResponse = new GetTemperatureResponse(mostRecentTemperature.getId(), mostRecentTemperature.getTemperature(), mostRecentTemperature.getDateRecorded());
+
+                GetDeviceResponse getDeviceResponse = new GetDeviceResponse(device.getId(), device.getLocationEntity().getId(), device.getDeviceName(), temperatureResponse);
                 devicesResponse.add(getDeviceResponse);
             });
 
 
-            return new ResponseEntity<>(devicesResponse, HttpStatus.OK);
+            return devicesResponse;
         }
     }
 
@@ -111,7 +117,7 @@ public class GetInfoService {
 
 
 
-        TemperatureEntity mostRecentTemperature = temperatureDao.getMostRecentTemperatureByDeviceIdAndDate(LocalDateTime.now(), deviceId);
+        TemperatureEntity mostRecentTemperature = temperatureDao.getMostRecentTemperatureByDeviceId(deviceId);
 
 //        List<TemperatureHourlyAverage> averageHourlyTemperaturesCurrentDay = temperatureDao.findAverageTemperatureByDateAndHour(deviceId, LocalDateTime.now());
 
