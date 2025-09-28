@@ -52,6 +52,17 @@ public class GetInfoController {
         }
     }
 
+    @GetMapping("informationByLocation/{locationId}")
+    public ResponseEntity<GetLocationResponse> getInformationByLocation(@PathVariable int locationId) {
+        GetLocationResponse locationResponse = getInfoService.getInformationByLocation(locationId);
+
+        if (locationResponse != null) {
+            return new ResponseEntity<>(locationResponse, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("informationByDeviceCurrentDay/{deviceId}")
     public ResponseEntity<ViewDeviceResponse> getInformationByDeviceCurrentDay(@PathVariable int deviceId) {
 
@@ -83,8 +94,6 @@ public class GetInfoController {
 
         // Get the device information.
         homeScreenInfoResponseEntity.setNumDevices(totalDevices);
-
-
 
         return new ResponseEntity<>(homeScreenInfoResponseEntity, HttpStatus.OK);
     }

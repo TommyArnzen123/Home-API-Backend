@@ -61,7 +61,8 @@ public class SecurityConfig {
 								"getInfo/homeScreenInfo/*",
 								"getInfo/locationsByHome/*" ,
 								"getInfo/informationByDeviceCurrentDay/*",
-								"delete/device/*")
+								"delete/device/*",
+								"delete/location/*")
 						.permitAll()
 						.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

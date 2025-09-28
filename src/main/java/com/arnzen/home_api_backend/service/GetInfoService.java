@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,16 +64,20 @@ public class GetInfoService {
         List<LocationEntity> locations = locationDao.findByHomeEntityId(homeId);
 
         if (locations.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         } else {
             List<GetLocationResponse> locationsResponse = new ArrayList<>();
 
             locations.forEach(location -> {
-                GetLocationResponse getLocationResponse = new GetLocationResponse(location.getId(), location.getHomeEntity().getId(), location.getLocationName());
+                GetLocationResponse getLocationResponse = new GetLocationResponse(location.getId(), location.getHomeEntity().getId(), location.getLocationName(), null);
                 locationsResponse.add(getLocationResponse);
             });
 
-            return locationsResponse;
+            if (!locationsResponse.isEmpty()) {
+                return locationsResponse;
+            } else {
+                return Collections.emptyList();
+            }
         }
     }
 
@@ -81,7 +86,7 @@ public class GetInfoService {
         List<DeviceEntity> devices = deviceDao.findByLocationEntityId(locationId);
 
         if (devices.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         } else {
 
             List<GetDeviceResponse> devicesResponse = new ArrayList<>();
@@ -98,7 +103,11 @@ public class GetInfoService {
             });
 
 
-            return devicesResponse;
+            if (!devicesResponse.isEmpty()) {
+                return devicesResponse;
+            } else {
+                return Collections.emptyList();
+            }
         }
     }
 
@@ -138,5 +147,46 @@ public class GetInfoService {
         }
 
         return viewDeviceResponse;
+    }
+
+    public GetLocationResponse getInformationByLocation(int locationId) {
+
+        Optional<LocationEntity> locationEntity = locationDao.findById(locationId);
+
+        if (locationEntity.isPresent()) {
+
+            List<GetDeviceResponse> devicesByLocation = new ArrayList<>();
+
+            // Get the devices for the specified location.
+            List<DeviceEntity> devices = deviceDao.findByLocationEntityId(locationId);
+
+            if (!devices.isEmpty()) {
+                devices.forEach(device -> {
+
+                    // Get the most recent temperature reading for the specified device.
+                    TemperatureEntity temperature = temperatureDao.getMostRecentTemperatureByDeviceId(device.getId());
+
+                    if (temperature != null) {
+                        GetTemperatureResponse getTemperatureResponse = new GetTemperatureResponse(temperature.getId(), temperature.getTemperature(), temperature.getDateRecorded());
+                        devicesByLocation.add(new GetDeviceResponse(device.getId(), locationId, device.getDeviceName(), getTemperatureResponse));
+                    } else {
+                        devicesByLocation.add(new GetDeviceResponse(device.getId(), locationId, device.getDeviceName(), null));
+                    }
+                });
+            }
+
+
+            GetLocationResponse locationResponse = new GetLocationResponse();
+            locationResponse.setLocationId(locationId);
+            locationResponse.setLocationName(locationEntity.get().getLocationName());
+            locationResponse.setHomeId(locationEntity.get().getHomeEntity().getId());
+            locationResponse.setDevices(devicesByLocation);
+
+            return locationResponse;
+
+        } else {
+            return null;    // The specified location ID was not found in the database.
+        }
+
     }
 }
