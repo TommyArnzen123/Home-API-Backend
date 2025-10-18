@@ -56,6 +56,7 @@ public class SecurityConfig {
 		http.csrf(customizer -> customizer.disable())
 				.authorizeHttpRequests(request -> request
 						.requestMatchers("register/user",
+								"register/home",
 								"login",
 								"temperature/save",
 								"getInfo/homeScreenInfo/*",
