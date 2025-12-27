@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface DeviceDao extends JpaRepository<DeviceEntity, Integer> {
     List<DeviceEntity> findByLocationEntityId(int locationId);
+
+    List<DeviceEntity> findAllByLocationEntityId(int locationId);
 }

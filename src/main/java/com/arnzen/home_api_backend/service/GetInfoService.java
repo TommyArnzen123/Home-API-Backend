@@ -36,22 +36,8 @@ public class GetInfoService {
         return userDao.findByUsernameIgnoreCase(username);
     }
 
-    public List<GetHomeResponse> getHomesByUser(int userId) {
-        List<HomeEntity> homes = homeDao.findByUserEntityId(userId);
-
-        if (homes.isEmpty()) {
-            return null;
-        } else {
-
-            List<GetHomeResponse> homesResponse = new ArrayList<>();
-
-            homes.forEach(home -> {
-                GetHomeResponse getHomeResponse = new GetHomeResponse(home.getId(), home.getUserEntity().getId(), home.getHomeName());
-                homesResponse.add(getHomeResponse);
-            });
-
-            return homesResponse;
-        }
+    public List<HomeEntity> getHomesByUser(int userId) {
+        return homeDao.findByUserEntityId(userId);
     }
 
     public HomeEntity getHomeById(int homeId) {
@@ -60,25 +46,8 @@ public class GetInfoService {
         return home.orElse(null);
     }
 
-    public List<GetLocationResponse> getLocationsByHome(int homeId) {
-        List<LocationEntity> locations = locationDao.findByHomeEntityId(homeId);
-
-        if (locations.isEmpty()) {
-            return Collections.emptyList();
-        } else {
-            List<GetLocationResponse> locationsResponse = new ArrayList<>();
-
-            locations.forEach(location -> {
-                GetLocationResponse getLocationResponse = new GetLocationResponse(location.getId(), location.getHomeEntity().getId(), location.getLocationName(), null);
-                locationsResponse.add(getLocationResponse);
-            });
-
-            if (!locationsResponse.isEmpty()) {
-                return locationsResponse;
-            } else {
-                return Collections.emptyList();
-            }
-        }
+    public List<LocationEntity> getLocationsByHome(int homeId) {
+        return locationDao.findByHomeEntityId(homeId);
     }
 
     public List<GetDeviceResponse> getDevicesByLocation(int locationId) {
@@ -188,5 +157,145 @@ public class GetInfoService {
             return null;    // The specified location ID was not found in the database.
         }
 
+    }
+
+    public ViewHomeInfoResponseEntity getViewHomeInfo(int homeId) {
+
+        ViewHomeInfoResponseEntity responseEntity = new ViewHomeInfoResponseEntity();
+
+        Optional<HomeEntity> homeEntity = homeDao.findById(homeId);
+
+        if (homeEntity.isPresent()) {
+            System.out.println(homeId);
+            System.out.println(homeEntity.get().getHomeName());
+            responseEntity.setHomeName(homeEntity.get().getHomeName());
+            List<LocationEntity> locations = locationDao.findAllByHomeEntityId(homeId);
+
+            responseEntity.setLocations(locations);
+        } else {
+            return null;
+        }
+
+        return responseEntity;
+    }
+
+    public ResponseEntity<HomeScreenInfoResponseEntity> getHomeScreenInfo(int userId) {
+
+        HomeScreenInfoResponseEntity response = new HomeScreenInfoResponseEntity();
+
+        int totalLocations = 0;
+        int totalDevices = 0;
+
+        // Get homes for the specified user.
+        List<HomeEntity> homes = getAllHomesByUserId(userId);
+
+        for (HomeEntity home : homes) {
+
+            // Get locations for the specified home.
+            List<LocationEntity> locations = getAllLocationsByHomeId(home.getId());
+            totalLocations += locations.size();
+
+            for (LocationEntity location : locations) {
+
+                // Get devices for the specified location.
+                List<DeviceEntity> devices = getAllDevicesByLocationId(location.getId());
+                totalDevices += devices.size();
+            }
+        }
+
+        response.setHomes(convertHomeEntityToGetHomeResponse(homes));
+        response.setNumLocations(totalLocations);
+        response.setNumDevices(totalDevices);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public ViewHomeInfoResponseEntity getViewHomeByIdInfo(int homeId) {
+
+        Optional<HomeEntity> home = homeDao.findById(homeId);
+
+        ViewHomeInfoResponseEntity response = new ViewHomeInfoResponseEntity();
+
+        if (home.isPresent()) {
+
+            int totalDevices = 0;
+
+            // Get locations for the specified home.
+            List<LocationEntity> locations = getAllLocationsByHomeId(homeId);
+
+            for (LocationEntity location : locations) {
+
+                // Get devices for the specified location.
+                List<DeviceEntity> devices = getAllDevicesByLocationId(location.getId());
+                totalDevices += devices.size();
+            }
+
+
+            response.setLocations(locations);
+            response.setHomeName(home.get().getHomeName());
+            response.setNumDevices(totalDevices);
+        }
+
+        return response;
+    }
+
+    // Helper methods.
+    // Return all homes for a specified user.
+    public List<HomeEntity> getAllHomesByUserId(int userId) {
+        return homeDao.findAllByUserEntityId(userId);
+    }
+
+    // Return all locations for a specified home.
+    public List<LocationEntity> getAllLocationsByHomeId(int homeId) {
+        return locationDao.findAllByHomeEntityId(homeId);
+    }
+
+    // Return all devices for a specified location.
+    public List<DeviceEntity> getAllDevicesByLocationId(int locationId) {
+        return deviceDao.findAllByLocationEntityId(locationId);
+    }
+
+    // Return all temperature for a specified device.
+    public List<TemperatureEntity> getAllTemperaturesByDeviceId(int deviceId) {
+        return temperatureDao.findAllByDeviceEntityId(deviceId);
+    }
+
+    // Get the total number of homes for the specified user.
+    public int getTotalHomesByUser(int userId) {
+        List<HomeEntity> homes = getAllHomesByUserId(userId);
+
+        return homes.size();
+    }
+
+    // Get the total number of locations for the specified home.
+    public int getTotalLocationsByHome(int homeId) {
+        List<LocationEntity> locations = getAllLocationsByHomeId(homeId);
+
+        return locations.size();
+    }
+
+    // Get the total number of devices for the specified location.
+    public int getTotalDevicesByLocation(int locationId) {
+        List<DeviceEntity> devices = getAllDevicesByLocationId(locationId);
+
+        return devices.size();
+    }
+
+    // Get the total number of temperature readings for the specified device.
+    public int getTotalTemperatureReadingsByDevice(int deviceId) {
+        List<TemperatureEntity> temperatureReadings = getAllTemperaturesByDeviceId(deviceId);
+
+        return temperatureReadings.size();
+    }
+
+    public List<GetHomeResponse> convertHomeEntityToGetHomeResponse(List<HomeEntity> homes) {
+        List<GetHomeResponse> newHomes = new ArrayList<>();
+
+        for (HomeEntity home : homes) {
+            GetHomeResponse homeResponse = new GetHomeResponse(home.getId(), home.getUserEntity().getId(), home.getHomeName());
+            newHomes.add(homeResponse);
+        }
+
+        return newHomes;
     }
 }

@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface LocationDao extends JpaRepository<LocationEntity, Integer> {
     List<LocationEntity> findByHomeEntityId(int homeId);
+
+    List<LocationEntity> findAllByHomeEntityId(int homeId);
 }

@@ -19,27 +19,27 @@ public class GetInfoController {
     @Autowired
     GetInfoService getInfoService;
 
-    @GetMapping("homesByUser/{userId}")
-    public ResponseEntity<List<GetHomeResponse>> getHomesByUser(@PathVariable int userId) {
-        List<GetHomeResponse> homes = getInfoService.getHomesByUser(userId);
+//    @GetMapping("homesByUser/{userId}")
+//    public ResponseEntity<List<GetHomeResponse>> getHomesByUser(@PathVariable int userId) {
+//        List<GetHomeResponse> homes = getInfoService.getHomesByUser(userId);
+//
+//        if (homes.isEmpty()) {
+//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//        } else {
+//            return new ResponseEntity<>(homes, HttpStatus.OK);
+//        }
+//    }
 
-        if (homes.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(homes, HttpStatus.OK);
-        }
-    }
-
-    @GetMapping("locationsByHome/{homeId}")
-    public ResponseEntity<List<GetLocationResponse>> getLocationsByHome(@PathVariable int homeId){
-        List<GetLocationResponse> locations = getInfoService.getLocationsByHome(homeId);
-
-        if (locations.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(locations, HttpStatus.OK);
-        }
-    }
+//    @GetMapping("locationsByHome/{homeId}")
+//    public ResponseEntity<List<GetLocationResponse>> getLocationsByHome(@PathVariable int homeId){
+//        List<GetLocationResponse> locations = getInfoService.getLocationsByHome(homeId);
+//
+//        if (locations.isEmpty()) {
+//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//        } else {
+//            return new ResponseEntity<>(locations, HttpStatus.OK);
+//        }
+//    }
 
     @GetMapping("devicesByLocation/{locationId}")
     public ResponseEntity<List<GetDeviceResponse>> getDevicesByLocation(@PathVariable int locationId) {
@@ -77,24 +77,18 @@ public class GetInfoController {
 
     @GetMapping("homeScreenInfo/{userId}")
     public ResponseEntity<HomeScreenInfoResponseEntity> getHomeScreenInfo(@PathVariable int userId) {
+        return getInfoService.getHomeScreenInfo(userId);
+    }
 
-        HomeScreenInfoResponseEntity homeScreenInfoResponseEntity = new HomeScreenInfoResponseEntity();
+    @GetMapping("viewHomeInfo/{homeId}")
+    public ResponseEntity<ViewHomeInfoResponseEntity> getViewHomeInfo(@PathVariable int homeId) {
 
-        int totalLocations = 0;
-        int totalDevices = 0;
+        ViewHomeInfoResponseEntity homeInfo = getInfoService.getViewHomeInfo(homeId);
 
-        List<GetHomeResponse> homes = getInfoService.getHomesByUser(userId);
-
-
-        // Get the home information.
-        homeScreenInfoResponseEntity.setHomes(homes);
-
-        // Get the location information.
-        homeScreenInfoResponseEntity.setNumLocations(totalLocations);
-
-        // Get the device information.
-        homeScreenInfoResponseEntity.setNumDevices(totalDevices);
-
-        return new ResponseEntity<>(homeScreenInfoResponseEntity, HttpStatus.OK);
+        if (homeInfo != null) {
+            return new ResponseEntity<>(homeInfo, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 }

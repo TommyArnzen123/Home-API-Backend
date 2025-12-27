@@ -24,4 +24,6 @@ public interface TemperatureDao extends JpaRepository<TemperatureEntity, Integer
     TemperatureEntity getMostRecentTemperatureByDeviceId(@Param("deviceId") int deviceId);
 
     void deleteAllByDeviceEntityId(int deviceEntityId);
+
+    List<TemperatureEntity> findAllByDeviceEntityId(int deviceId);
 }
