@@ -57,6 +57,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests(request -> request
 						.requestMatchers("register/user",
 								"register/home",
+								"register/location",
 								"login",
 								"temperature/save",
 								"getInfo/homeScreenInfo/*",
