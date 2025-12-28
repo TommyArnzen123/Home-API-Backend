@@ -159,24 +159,32 @@ public class GetInfoService {
 
     }
 
-    public ViewHomeInfoResponseEntity getViewHomeInfo(int homeId) {
+    public ResponseEntity<ViewHomeResponseEntity> getViewHomeInfo(int homeId) {
 
-        ViewHomeInfoResponseEntity responseEntity = new ViewHomeInfoResponseEntity();
+        ViewHomeResponseEntity responseEntity = new ViewHomeResponseEntity();
 
         Optional<HomeEntity> homeEntity = homeDao.findById(homeId);
 
         if (homeEntity.isPresent()) {
-            System.out.println(homeId);
-            System.out.println(homeEntity.get().getHomeName());
+
+            int totalDevices = 0;
+
+            responseEntity.setHomeId(homeId);
             responseEntity.setHomeName(homeEntity.get().getHomeName());
             List<LocationEntity> locations = locationDao.findAllByHomeEntityId(homeId);
 
-            responseEntity.setLocations(locations);
-        } else {
-            return null;
-        }
+            for (LocationEntity location : locations) {
+                totalDevices += getTotalDevicesByLocation(location.getId());
+            }
 
-        return responseEntity;
+            List<GetLocationResponse> newLocations = convertLocationEntityToGetLocationResponse(locations);
+            responseEntity.setLocations(newLocations);
+            responseEntity.setNumDevices(totalDevices);
+
+            return new ResponseEntity<>(responseEntity, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(responseEntity, HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity<HomeScreenInfoResponseEntity> getHomeScreenInfo(int userId) {
@@ -297,5 +305,20 @@ public class GetInfoService {
         }
 
         return newHomes;
+    }
+
+    public List<GetLocationResponse> convertLocationEntityToGetLocationResponse(List<LocationEntity> locations) {
+        List<GetLocationResponse> newLocations = new ArrayList<>();
+
+        for (LocationEntity location : locations) {
+            GetLocationResponse locationResponse = new GetLocationResponse();
+            locationResponse.setLocationId(location.getId());
+            locationResponse.setLocationName(location.getLocationName());
+            locationResponse.setHomeId(location.getHomeEntity().getId());
+            locationResponse.setDevices(getDevicesByLocation(location.getId()));
+            newLocations.add(locationResponse);
+        }
+
+        return newLocations;
     }
 }

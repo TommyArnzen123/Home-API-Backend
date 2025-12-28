@@ -81,14 +81,7 @@ public class GetInfoController {
     }
 
     @GetMapping("viewHomeInfo/{homeId}")
-    public ResponseEntity<ViewHomeInfoResponseEntity> getViewHomeInfo(@PathVariable int homeId) {
-
-        ViewHomeInfoResponseEntity homeInfo = getInfoService.getViewHomeInfo(homeId);
-
-        if (homeInfo != null) {
-            return new ResponseEntity<>(homeInfo, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<ViewHomeResponseEntity> getViewHomeInfo(@PathVariable int homeId) {
+        return getInfoService.getViewHomeInfo(homeId);
     }
 }
