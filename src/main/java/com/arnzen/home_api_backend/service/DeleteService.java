@@ -5,6 +5,7 @@ import com.arnzen.home_api_backend.dao.HomeDao;
 import com.arnzen.home_api_backend.dao.LocationDao;
 import com.arnzen.home_api_backend.dao.TemperatureDao;
 import com.arnzen.home_api_backend.model.*;
+import com.arnzen.home_api_backend.model.base.HomeEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;

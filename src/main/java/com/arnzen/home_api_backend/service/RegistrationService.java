@@ -4,12 +4,12 @@ import com.arnzen.home_api_backend.dao.HomeDao;
 import com.arnzen.home_api_backend.dao.UserDao;
 import com.arnzen.home_api_backend.dao.LocationDao;
 import com.arnzen.home_api_backend.dao.DeviceDao;
-import com.arnzen.home_api_backend.model.HomeEntity;
+import com.arnzen.home_api_backend.model.base.HomeEntity;
 import com.arnzen.home_api_backend.model.registration.RegistrationResponse;
-import com.arnzen.home_api_backend.model.registration.UserEntity;
+import com.arnzen.home_api_backend.model.base.UserEntity;
 import com.arnzen.home_api_backend.model.LocationEntity;
 import com.arnzen.home_api_backend.model.DeviceEntity;
-import com.arnzen.home_api_backend.model.RegisterHomeInfo;
+import com.arnzen.home_api_backend.model.registration.RegisterHomeInfo;
 import com.arnzen.home_api_backend.model.RegisterLocationInfo;
 import com.arnzen.home_api_backend.model.RegisterDeviceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,18 +59,19 @@ public class RegistrationService {
         return new ResponseEntity<>(generateRegistrationResponse("User added successfully."), HttpStatus.OK);
     }
 
-    public ResponseEntity<HomeEntity> registerHome(RegisterHomeInfo homeInfo) {
+    public ResponseEntity<RegistrationResponse> registerHome(RegisterHomeInfo homeInfo) {
         Optional<UserEntity> user = userDao.findById(homeInfo.getUserId());
+
+        // The user was found in the database. Add the home.
         if (user.isPresent()) {
             HomeEntity home = new HomeEntity();
             home.setUserEntity(user.get());
             home.setHomeName(homeInfo.getHomeName());
-            HomeEntity newHome = homeDao.save(home);
-            return new ResponseEntity<>(newHome, HttpStatus.OK);
+            homeDao.save(home);
+            return new ResponseEntity<>(generateRegistrationResponse(("Home added successfully.")), HttpStatus.OK);
         } else {
-
-            // The user was not found in the database.
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            // The user was not found in the database. Do not add the home.
+            return new ResponseEntity<>(generateRegistrationResponse("Error adding home."), HttpStatus.BAD_REQUEST);
         }
     }
 

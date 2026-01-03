@@ -2,7 +2,7 @@ package com.arnzen.home_api_backend.service;
 
 
 import com.arnzen.home_api_backend.dao.UserDao;
-import com.arnzen.home_api_backend.model.registration.UserEntity;
+import com.arnzen.home_api_backend.model.base.UserEntity;
 import com.arnzen.home_api_backend.model.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

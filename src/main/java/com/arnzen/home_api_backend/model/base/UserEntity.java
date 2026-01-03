@@ -1,4 +1,4 @@
-package com.arnzen.home_api_backend.model.registration;
+package com.arnzen.home_api_backend.model.base;
 
 import jakarta.persistence.*;
 

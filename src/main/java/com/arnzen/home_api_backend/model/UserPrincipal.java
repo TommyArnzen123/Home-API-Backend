@@ -1,6 +1,6 @@
 package com.arnzen.home_api_backend.model;
 
-import com.arnzen.home_api_backend.model.registration.UserEntity;
+import com.arnzen.home_api_backend.model.base.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,12 +1,11 @@
 package com.arnzen.home_api_backend.controller;
 
 import com.arnzen.home_api_backend.model.registration.RegistrationResponse;
-import com.arnzen.home_api_backend.model.registration.UserEntity;
-import com.arnzen.home_api_backend.model.HomeEntity;
+import com.arnzen.home_api_backend.model.base.UserEntity;
 import com.arnzen.home_api_backend.model.LocationEntity;
 import com.arnzen.home_api_backend.model.DeviceEntity;
 
-import com.arnzen.home_api_backend.model.RegisterHomeInfo;
+import com.arnzen.home_api_backend.model.registration.RegisterHomeInfo;
 import com.arnzen.home_api_backend.service.RegistrationService;
 import com.arnzen.home_api_backend.model.RegisterLocationInfo;
 import com.arnzen.home_api_backend.model.RegisterDeviceInfo;
@@ -34,7 +33,7 @@ public class RegistrationController {
 
     // Allow a new home to be registered and associated with a registered user.
     @PostMapping("home")
-    public ResponseEntity<HomeEntity> registerHome(@RequestBody RegisterHomeInfo home) {
+    public ResponseEntity<RegistrationResponse> registerHome(@RequestBody RegisterHomeInfo home) {
         return registrationService.registerHome(home);
     }
 
