@@ -1,6 +1,6 @@
 package com.arnzen.home_api_backend.dao;
 
-import com.arnzen.home_api_backend.model.LocationEntity;
+import com.arnzen.home_api_backend.model.base.LocationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

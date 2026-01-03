@@ -3,6 +3,7 @@ package com.arnzen.home_api_backend.service;
 import com.arnzen.home_api_backend.dao.DeviceDao;
 import com.arnzen.home_api_backend.dao.TemperatureDao;
 import com.arnzen.home_api_backend.model.*;
+import com.arnzen.home_api_backend.model.base.DeviceEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

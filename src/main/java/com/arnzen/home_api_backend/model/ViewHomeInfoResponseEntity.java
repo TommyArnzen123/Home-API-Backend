@@ -1,5 +1,7 @@
 package com.arnzen.home_api_backend.model;
 
+import com.arnzen.home_api_backend.model.base.LocationEntity;
+
 import java.util.List;
 
 public class ViewHomeInfoResponseEntity {

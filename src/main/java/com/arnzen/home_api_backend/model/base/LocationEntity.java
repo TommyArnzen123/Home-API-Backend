@@ -1,6 +1,5 @@
-package com.arnzen.home_api_backend.model;
+package com.arnzen.home_api_backend.model.base;
 
-import com.arnzen.home_api_backend.model.base.HomeEntity;
 import jakarta.persistence.*;
 
 @Entity

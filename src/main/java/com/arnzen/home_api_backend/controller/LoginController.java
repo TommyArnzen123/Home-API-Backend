@@ -1,6 +1,6 @@
 package com.arnzen.home_api_backend.controller;
 
-import com.arnzen.home_api_backend.model.LoginUserInfo;
+import com.arnzen.home_api_backend.model.login.LoginUserInfo;
 import com.arnzen.home_api_backend.model.base.UserEntity;
 import com.arnzen.home_api_backend.service.GetInfoService;
 import com.arnzen.home_api_backend.service.JwtService;
@@ -35,9 +35,7 @@ public class LoginController {
                 .authenticate(new UsernamePasswordAuthenticationToken(loginUserInfo.getUsername(), loginUserInfo.getPassword()));
 
         if(authentication.isAuthenticated()) {
-
             UserEntity userEntity = getInfoService.getUserEntityByUsername(loginUserInfo.getUsername());
-
 
             Map<String, String> loginResponse = new HashMap<>();
             loginResponse.put("jwtToken", jwtService.generateToken(loginUserInfo.getUsername()));

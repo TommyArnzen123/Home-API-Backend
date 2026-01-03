@@ -2,7 +2,9 @@ package com.arnzen.home_api_backend.service;
 
 import com.arnzen.home_api_backend.dao.*;
 import com.arnzen.home_api_backend.model.*;
+import com.arnzen.home_api_backend.model.base.DeviceEntity;
 import com.arnzen.home_api_backend.model.base.HomeEntity;
+import com.arnzen.home_api_backend.model.base.LocationEntity;
 import com.arnzen.home_api_backend.model.base.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

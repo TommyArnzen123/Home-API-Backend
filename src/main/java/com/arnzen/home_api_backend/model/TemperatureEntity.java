@@ -1,11 +1,9 @@
 package com.arnzen.home_api_backend.model;
 
+import com.arnzen.home_api_backend.model.base.DeviceEntity;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Date;
 
 @Entity
 public class TemperatureEntity {
