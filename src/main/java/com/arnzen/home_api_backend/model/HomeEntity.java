@@ -1,5 +1,6 @@
 package com.arnzen.home_api_backend.model;
 
+import com.arnzen.home_api_backend.model.registration.UserEntity;
 import jakarta.persistence.*;
 
 @Entity

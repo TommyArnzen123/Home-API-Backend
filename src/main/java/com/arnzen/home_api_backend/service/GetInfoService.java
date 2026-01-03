@@ -2,13 +2,13 @@ package com.arnzen.home_api_backend.service;
 
 import com.arnzen.home_api_backend.dao.*;
 import com.arnzen.home_api_backend.model.*;
+import com.arnzen.home_api_backend.model.registration.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

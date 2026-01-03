@@ -1,6 +1,7 @@
 package com.arnzen.home_api_backend.controller;
 
-import com.arnzen.home_api_backend.model.UserEntity;
+import com.arnzen.home_api_backend.model.registration.RegistrationResponse;
+import com.arnzen.home_api_backend.model.registration.UserEntity;
 import com.arnzen.home_api_backend.model.HomeEntity;
 import com.arnzen.home_api_backend.model.LocationEntity;
 import com.arnzen.home_api_backend.model.DeviceEntity;
@@ -27,7 +28,7 @@ public class RegistrationController {
 
     // Allow a new user to be registered with the application.
     @PostMapping("user")
-    public ResponseEntity<UserEntity> registerUser(@RequestBody UserEntity user) {
+    public ResponseEntity<RegistrationResponse> registerUser(@RequestBody UserEntity user) {
         return registrationService.registerUser(user);
     }
 

@@ -5,7 +5,8 @@ import com.arnzen.home_api_backend.dao.UserDao;
 import com.arnzen.home_api_backend.dao.LocationDao;
 import com.arnzen.home_api_backend.dao.DeviceDao;
 import com.arnzen.home_api_backend.model.HomeEntity;
-import com.arnzen.home_api_backend.model.UserEntity;
+import com.arnzen.home_api_backend.model.registration.RegistrationResponse;
+import com.arnzen.home_api_backend.model.registration.UserEntity;
 import com.arnzen.home_api_backend.model.LocationEntity;
 import com.arnzen.home_api_backend.model.DeviceEntity;
 import com.arnzen.home_api_backend.model.RegisterHomeInfo;
@@ -35,15 +36,27 @@ public class RegistrationService {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-    public ResponseEntity<UserEntity> registerUser(UserEntity user) {
+    public ResponseEntity<RegistrationResponse> registerUser(UserEntity user) {
+
+        // Get the username entered by the user.
         String normalizedUser = user.getUsername().toLowerCase();
+
+        // Check if the username is already in the database.
         UserEntity checkUser = userDao.findByUsernameIgnoreCase(normalizedUser);
+
         if (checkUser != null) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+
+            // If the username is already in the database, return
+            // an error response.
+            return new ResponseEntity<>(generateRegistrationResponse("Error adding user."), HttpStatus.CONFLICT);
         }
+
+        // Encode the password entered by the user.
         user.setPassword(encoder.encode(user.getPassword()));
-        UserEntity newUser = userDao.save(user);
-        return new ResponseEntity<>(newUser, HttpStatus.OK);
+
+        // Save the new user object in the database.
+        userDao.save(user);
+        return new ResponseEntity<>(generateRegistrationResponse("User added successfully."), HttpStatus.OK);
     }
 
     public ResponseEntity<HomeEntity> registerHome(RegisterHomeInfo homeInfo) {
@@ -89,5 +102,9 @@ public class RegistrationService {
             // The location was not found in the database.
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private RegistrationResponse generateRegistrationResponse(String message) {
+        return new RegistrationResponse(message);
     }
 }

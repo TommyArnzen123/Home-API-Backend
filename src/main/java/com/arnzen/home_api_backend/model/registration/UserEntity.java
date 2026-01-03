@@ -1,8 +1,6 @@
-package com.arnzen.home_api_backend.model;
+package com.arnzen.home_api_backend.model.registration;
 
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 public class UserEntity {
