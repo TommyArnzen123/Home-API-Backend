@@ -6,6 +6,10 @@ import com.arnzen.home_api_backend.model.base.DeviceEntity;
 import com.arnzen.home_api_backend.model.base.HomeEntity;
 import com.arnzen.home_api_backend.model.base.LocationEntity;
 import com.arnzen.home_api_backend.model.base.UserEntity;
+import com.arnzen.home_api_backend.model.info.HomeScreenInfoResponseEntity;
+import com.arnzen.home_api_backend.model.info.ViewDeviceResponseEntity;
+import com.arnzen.home_api_backend.model.info.ViewHomeResponseEntity;
+import com.arnzen.home_api_backend.model.info.ViewLocationResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,42 +87,39 @@ public class GetInfoService {
         }
     }
 
-    public ViewDeviceResponse getTemperaturesByDeviceCurrentDay(int deviceId) {
+    public ResponseEntity<ViewDeviceResponseEntity> getTemperaturesByDeviceCurrentDay(int deviceId) {
 
-        ViewDeviceResponse viewDeviceResponse = new ViewDeviceResponse();
+        ViewDeviceResponseEntity viewDeviceResponse = new ViewDeviceResponseEntity();
 
         Optional<DeviceEntity> deviceEntity = deviceDao.findById(deviceId);
 
-        if (deviceEntity.isEmpty()) {
-            return null;
-        }
+        if (deviceEntity.isPresent()) {
 
-        String deviceName = deviceEntity.get().getDeviceName();
-        int locationId = deviceEntity.get().getLocationEntity().getId();
+            String deviceName = deviceEntity.get().getDeviceName();
+            int locationId = deviceEntity.get().getLocationEntity().getId();
 
+            TemperatureEntity mostRecentTemperature = temperatureDao.getMostRecentTemperatureByDeviceId(deviceId);
 
+            List<TemperatureHourlyAverage> averageHourlyTemperaturesCurrentDay = temperatureDao.findAverageTemperaturePastTwentyFourHours(deviceId, LocalDateTime.now().minusHours(23));
 
-        TemperatureEntity mostRecentTemperature = temperatureDao.getMostRecentTemperatureByDeviceId(deviceId);
+            viewDeviceResponse.setDeviceId(deviceId);
+            viewDeviceResponse.setDeviceName(deviceName);
+            viewDeviceResponse.setLocationId(locationId);
+            viewDeviceResponse.setAverageTemperaturesByHourCurrentDay(averageHourlyTemperaturesCurrentDay);
 
-//        List<TemperatureHourlyAverage> averageHourlyTemperaturesCurrentDay = temperatureDao.findAverageTemperatureByDateAndHour(deviceId, LocalDateTime.now());
+            if (mostRecentTemperature == null) {
+                viewDeviceResponse.setMostRecentTemperature(0.0);
+                viewDeviceResponse.setMostRecentTemperatureAvailable(false);
+            } else {
+                viewDeviceResponse.setMostRecentTemperature(mostRecentTemperature.getTemperature());
+                viewDeviceResponse.setMostRecentTemperatureAvailableDateTime(mostRecentTemperature.getDateRecorded());
+                viewDeviceResponse.setMostRecentTemperatureAvailable(true);
+            }
 
-        List<TemperatureHourlyAverage> averageHourlyTemperaturesCurrentDay = temperatureDao.findAverageTemperaturePastTwentyFourHours(deviceId, LocalDateTime.now().minusHours(23));
-
-        viewDeviceResponse.setDeviceId(deviceId);
-        viewDeviceResponse.setDeviceName(deviceName);
-        viewDeviceResponse.setLocationId(locationId);
-        viewDeviceResponse.setAverageTemperaturesByHourCurrentDay(averageHourlyTemperaturesCurrentDay);
-
-        if (mostRecentTemperature == null) {
-            viewDeviceResponse.setMostRecentTemperature(0.0);
-            viewDeviceResponse.setMostRecentTemperatureAvailable(false);
+            return new ResponseEntity<>(viewDeviceResponse, HttpStatus.OK);
         } else {
-            viewDeviceResponse.setMostRecentTemperature(mostRecentTemperature.getTemperature());
-            viewDeviceResponse.setMostRecentTemperatureAvailableDateTime(mostRecentTemperature.getDateRecorded());
-            viewDeviceResponse.setMostRecentTemperatureAvailable(true);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-
-        return viewDeviceResponse;
     }
 
     public GetLocationResponse getInformationByLocation(int locationId) {
@@ -299,6 +300,27 @@ public class GetInfoService {
         return temperatureReadings.size();
     }
 
+    public ResponseEntity<ViewLocationResponseEntity> getViewLocationInfo(int locationId) {
+
+        // Verify the specified location exists in the database.
+        Optional<LocationEntity> locationEntity = locationDao.findById(locationId);
+
+        if (locationEntity.isPresent()) {
+            ViewLocationResponseEntity responseEntity = new ViewLocationResponseEntity();
+            responseEntity.setLocationId(locationId);
+            responseEntity.setLocationName(locationEntity.get().getLocationName());
+
+            // Get a list of devices associated with the location.
+            List<DeviceEntity> devices = deviceDao.findAllByLocationEntityId(locationId);
+
+            responseEntity.setDevices(convertDeviceEntityToGetDeviceResponse(devices));
+
+            return new ResponseEntity<>(responseEntity, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
     public List<GetHomeResponse> convertHomeEntityToGetHomeResponse(List<HomeEntity> homes) {
         List<GetHomeResponse> newHomes = new ArrayList<>();
 
@@ -323,5 +345,20 @@ public class GetInfoService {
         }
 
         return newLocations;
+    }
+
+    public List<GetDeviceResponse> convertDeviceEntityToGetDeviceResponse(List<DeviceEntity> devices) {
+        List<GetDeviceResponse> newDevices = new ArrayList<>();
+
+        for (DeviceEntity device : devices) {
+            GetDeviceResponse deviceResponse = new GetDeviceResponse();
+            deviceResponse.setDeviceId(device.getId());
+            deviceResponse.setDeviceName(device.getDeviceName());
+            deviceResponse.setLocationId(device.getLocationEntity().getId());
+
+            newDevices.add(deviceResponse);
+        }
+
+        return newDevices;
     }
 }

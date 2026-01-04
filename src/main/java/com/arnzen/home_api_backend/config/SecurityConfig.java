@@ -62,7 +62,7 @@ public class SecurityConfig {
 								"temperature/save",
 								"getInfo/homeScreenInfo/*",
 								"getInfo/viewHomeInfo/*",
-								"getInfo/locationsByHome/*" ,
+								"getInfo/viewLocationInfo/*",
 								"getInfo/informationByDeviceCurrentDay/*",
 								"delete/home/*",
 								"delete/location/*",

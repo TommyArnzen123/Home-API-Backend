@@ -1,12 +1,12 @@
-package com.arnzen.home_api_backend.model;
+package com.arnzen.home_api_backend.model.temperature;
 
-public class RegisterTemperatureInfo {
+public class SaveTemperatureInfo {
     private int deviceId;
     private double temperature;
 
-    public RegisterTemperatureInfo() {}
+    public SaveTemperatureInfo() {}
 
-    public RegisterTemperatureInfo(int deviceId, double temperature) {
+    public SaveTemperatureInfo(int deviceId, double temperature) {
         this.deviceId = deviceId;
         this.temperature = temperature;
     }

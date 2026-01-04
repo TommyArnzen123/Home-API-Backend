@@ -4,6 +4,7 @@ import com.arnzen.home_api_backend.dao.DeviceDao;
 import com.arnzen.home_api_backend.dao.TemperatureDao;
 import com.arnzen.home_api_backend.model.*;
 import com.arnzen.home_api_backend.model.base.DeviceEntity;
+import com.arnzen.home_api_backend.model.temperature.SaveTemperatureInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class TemperatureService {
     @Autowired
     TemperatureDao temperatureDao;
 
-    public ResponseEntity<TemperatureEntity> saveTemperatureByDevice(RegisterTemperatureInfo registerTemperatureInfo) {
+    public ResponseEntity<TemperatureEntity> saveTemperatureByDevice(SaveTemperatureInfo registerTemperatureInfo) {
         Optional<DeviceEntity> device = deviceDao.findById(registerTemperatureInfo.getDeviceId());
         if (device.isPresent()) {
             TemperatureEntity temperature = new TemperatureEntity();

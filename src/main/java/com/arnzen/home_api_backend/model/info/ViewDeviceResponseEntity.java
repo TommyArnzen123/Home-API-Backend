@@ -1,9 +1,11 @@
-package com.arnzen.home_api_backend.model;
+package com.arnzen.home_api_backend.model.info;
+
+import com.arnzen.home_api_backend.model.TemperatureHourlyAverage;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ViewDeviceResponse {
+public class ViewDeviceResponseEntity {
     int deviceId;
     int locationId;
     String deviceName;
@@ -12,9 +14,9 @@ public class ViewDeviceResponse {
     boolean mostRecentTemperatureAvailable;
     List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay;
 
-    public ViewDeviceResponse() {}
+    public ViewDeviceResponseEntity() {}
 
-    public ViewDeviceResponse(int deviceId, int locationId, String deviceName, double mostRecentTemperature, LocalDateTime mostRecentTemperatureAvailableDateTime, boolean mostRecentTemperatureAvailable, List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay) {
+    public ViewDeviceResponseEntity(int deviceId, int locationId, String deviceName, double mostRecentTemperature, LocalDateTime mostRecentTemperatureAvailableDateTime, boolean mostRecentTemperatureAvailable, List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay) {
         this.deviceId = deviceId;
         this.locationId = locationId;
         this.deviceName = deviceName;
