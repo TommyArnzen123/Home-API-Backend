@@ -1,6 +1,6 @@
 package com.arnzen.home_api_backend.dao;
 
-import com.arnzen.home_api_backend.model.TemperatureEntity;
+import com.arnzen.home_api_backend.model.base.TemperatureEntity;
 import com.arnzen.home_api_backend.model.TemperatureHourlyAverage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

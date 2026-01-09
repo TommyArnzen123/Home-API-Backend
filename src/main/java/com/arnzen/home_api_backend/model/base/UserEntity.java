@@ -2,12 +2,18 @@ package com.arnzen.home_api_backend.model.base;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HomeEntity> homes = new ArrayList<>();
 
     private String firstName;
     private String lastName;
@@ -17,8 +23,9 @@ public class UserEntity {
 
     public UserEntity() {}
 
-    public UserEntity(int id, String firstName, String lastName, String username, String password, String email) {
+    public UserEntity(int id, List<HomeEntity> homes, String firstName, String lastName, String username, String password, String email) {
         this.id = id;
+        this.homes = homes;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -72,5 +79,13 @@ public class UserEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<HomeEntity> getHomes() {
+        return homes;
+    }
+
+    public void setHomes(List<HomeEntity> homes) {
+        this.homes = homes;
     }
 }

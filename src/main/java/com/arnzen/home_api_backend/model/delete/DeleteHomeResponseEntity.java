@@ -1,16 +1,18 @@
 package com.arnzen.home_api_backend.model.delete;
 
-public class DeleteHomeResponse {
+public class DeleteHomeResponseEntity {
     private int homeId;
     private int numLocations;
     private int numDevices;
+    private int userId;
 
-    public DeleteHomeResponse() {}
+    public DeleteHomeResponseEntity() {}
 
-    public DeleteHomeResponse(int homeId, int numLocations, int numDevices) {
+    public DeleteHomeResponseEntity(int homeId, int numLocations, int numDevices, int userId) {
         this.homeId = homeId;
         this.numLocations = numLocations;
         this.numDevices = numDevices;
+        this.userId = userId;
     }
 
     public int getHomeId() {
@@ -35,5 +37,13 @@ public class DeleteHomeResponse {
 
     public void setNumDevices(int numDevices) {
         this.numDevices = numDevices;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

@@ -1,7 +1,7 @@
 package com.arnzen.home_api_backend.controller;
 
 import com.arnzen.home_api_backend.model.temperature.SaveTemperatureInfo;
-import com.arnzen.home_api_backend.model.TemperatureEntity;
+import com.arnzen.home_api_backend.model.base.TemperatureEntity;
 import com.arnzen.home_api_backend.service.TemperatureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -2,6 +2,9 @@ package com.arnzen.home_api_backend.model.base;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class HomeEntity {
 
@@ -13,14 +16,18 @@ public class HomeEntity {
     @JoinColumn(name = "user_entity_id")
     private UserEntity userEntity;
 
+    @OneToMany(mappedBy = "homeEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LocationEntity> locations = new ArrayList<>();
+
     private String homeName;
 
     public HomeEntity() {
     }
 
-    public HomeEntity(int id, UserEntity userEntity, String homeName) {
+    public HomeEntity(int id, UserEntity userEntity, List<LocationEntity> locations, String homeName) {
         this.id = id;
         this.userEntity = userEntity;
+        this.locations = locations;
         this.homeName = homeName;
     }
 
@@ -46,5 +53,13 @@ public class HomeEntity {
 
     public void setHomeName(String homeName) {
         this.homeName = homeName;
+    }
+
+    public List<LocationEntity> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<LocationEntity> locations) {
+        this.locations = locations;
     }
 }

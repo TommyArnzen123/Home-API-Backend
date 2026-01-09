@@ -58,6 +58,7 @@ public class SecurityConfig {
 						.requestMatchers("register/user",
 								"register/home",
 								"register/location",
+								"register/device",
 								"login",
 								"temperature/save",
 								"getInfo/homeScreenInfo/*",

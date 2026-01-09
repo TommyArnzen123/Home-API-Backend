@@ -2,10 +2,7 @@ package com.arnzen.home_api_backend.service;
 
 import com.arnzen.home_api_backend.dao.*;
 import com.arnzen.home_api_backend.model.*;
-import com.arnzen.home_api_backend.model.base.DeviceEntity;
-import com.arnzen.home_api_backend.model.base.HomeEntity;
-import com.arnzen.home_api_backend.model.base.LocationEntity;
-import com.arnzen.home_api_backend.model.base.UserEntity;
+import com.arnzen.home_api_backend.model.base.*;
 import com.arnzen.home_api_backend.model.info.HomeScreenInfoResponseEntity;
 import com.arnzen.home_api_backend.model.info.ViewDeviceResponseEntity;
 import com.arnzen.home_api_backend.model.info.ViewHomeResponseEntity;
@@ -39,18 +36,27 @@ public class GetInfoService {
     @Autowired
     TemperatureDao temperatureDao;
 
+    public DeviceEntity getDeviceById(int deviceId) {
+        Optional<DeviceEntity> device = deviceDao.findById(deviceId);
+        return device.orElse(null);
+    }
+
+    public LocationEntity getLocationById(int locationId) {
+        Optional<LocationEntity> location = locationDao.findById(locationId);
+        return location.orElse(null);
+    }
+
+    public HomeEntity getHomeById(int homeId) {
+        Optional<HomeEntity> home = homeDao.findById(homeId);
+        return home.orElse(null);
+    }
+
     public UserEntity getUserEntityByUsername(String username) {
         return userDao.findByUsernameIgnoreCase(username);
     }
 
     public List<HomeEntity> getHomesByUser(int userId) {
         return homeDao.findByUserEntityId(userId);
-    }
-
-    public HomeEntity getHomeById(int homeId) {
-        Optional<HomeEntity> home = homeDao.findById(homeId);
-
-        return home.orElse(null);
     }
 
     public List<LocationEntity> getLocationsByHome(int homeId) {
@@ -72,7 +78,11 @@ public class GetInfoService {
                 // Get the most recent temperature value recorded for the device.
                 TemperatureEntity mostRecentTemperature = temperatureDao.getMostRecentTemperatureByDeviceId(device.getId());
 
-                GetTemperatureResponse temperatureResponse = new GetTemperatureResponse(mostRecentTemperature.getId(), mostRecentTemperature.getTemperature(), mostRecentTemperature.getDateRecorded());
+                GetTemperatureResponse temperatureResponse = null;
+
+                if (mostRecentTemperature != null) {
+                    temperatureResponse = new GetTemperatureResponse(mostRecentTemperature.getId(), mostRecentTemperature.getTemperature(), mostRecentTemperature.getDateRecorded());
+                }
 
                 GetDeviceResponse getDeviceResponse = new GetDeviceResponse(device.getId(), device.getLocationEntity().getId(), device.getDeviceName(), temperatureResponse);
                 devicesResponse.add(getDeviceResponse);
