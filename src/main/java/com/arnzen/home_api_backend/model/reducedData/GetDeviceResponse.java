@@ -1,11 +1,11 @@
-package com.arnzen.home_api_backend.model;
+package com.arnzen.home_api_backend.model.reducedData;
 
 public class GetDeviceResponse {
 
     private int deviceId;
     private int locationId;
     private String deviceName;
-    private GetTemperatureResponse temperature;
+    private GetTemperatureResponse temperature; // Most recent temperature.
 
     public GetDeviceResponse() {}
 

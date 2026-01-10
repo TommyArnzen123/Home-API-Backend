@@ -16,7 +16,9 @@ public class ViewDeviceResponseEntity {
 
     public ViewDeviceResponseEntity() {}
 
-    public ViewDeviceResponseEntity(int deviceId, int locationId, String deviceName, double mostRecentTemperature, LocalDateTime mostRecentTemperatureAvailableDateTime, boolean mostRecentTemperatureAvailable, List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay) {
+    public ViewDeviceResponseEntity(int deviceId, int locationId, String deviceName,
+                                    double mostRecentTemperature, LocalDateTime mostRecentTemperatureAvailableDateTime,
+                                    boolean mostRecentTemperatureAvailable, List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay) {
         this.deviceId = deviceId;
         this.locationId = locationId;
         this.deviceName = deviceName;

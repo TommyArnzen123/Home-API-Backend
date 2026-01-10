@@ -39,31 +39,34 @@ public class DeleteService {
     public ResponseEntity<DeleteHomeResponseEntity> deleteHome(int homeId) throws EmptyResultDataAccessException {
         try {
 
-            System.out.println("Total Homes: " + homeDao.countTotalHomes(homeId));
-            System.out.println("Total Locations: " + homeDao.countTotalLocations(homeId));
-            System.out.println("Total Devices: " + homeDao.countTotalDevices(homeId));
-            System.out.println("Total Temperature Readings: " + homeDao.countTotalTemperatureReadings(homeId));
+            Optional<HomeEntity> homeEntity = homeDao.findById(homeId);
 
-            int totalHomes = homeDao.countTotalHomes(homeId);
-            int totalLocations = homeDao.countTotalLocations(homeId);
-            int totalDevices = homeDao.countTotalDevices(homeId);
-            int totalTemperatureReadings = homeDao.countTotalTemperatureReadings(homeId);
+            if (homeEntity.isPresent()) {
 
-//            Optional<HomeEntity> homeEntity = homeDao.findById(homeId);
-//
-//            if (homeEntity.isPresent()) {
-//
-//                deleteHomeById(homeId);
-//
-//                return new ResponseEntity<>(new DeleteHomeResponseEntity(
-//                        homeId, 1, 1, homeEntity.get().getUserEntity().getId()), HttpStatus.OK);
-//
-//            } else {
-//                // The specified home was not found. Return an error.
-//                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//            }
+                int totalLocationsBeforeDelete = homeDao.countTotalLocations(homeId);
+                int totalDevicesBeforeDelete = homeDao.countTotalDevices(homeId);
 
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                deleteHomeById(homeId);
+
+                int totalHomesAfterDelete = homeDao.countTotalHomes(homeId);
+                int totalLocationsAfterDelete = homeDao.countTotalLocations(homeId);
+                int totalDevicesAfterDelete = homeDao.countTotalDevices(homeId);
+                int totalTemperatureReadingsAfterDelete = homeDao.countTotalTemperatureReadings(homeId);
+
+                if (totalHomesAfterDelete == 0 && totalLocationsAfterDelete == 0 && totalDevicesAfterDelete == 0 && totalTemperatureReadingsAfterDelete == 0) {
+                    return new ResponseEntity<>(new DeleteHomeResponseEntity(
+                            homeId, totalLocationsBeforeDelete, totalDevicesBeforeDelete, homeEntity.get().getUserEntity().getId()), HttpStatus.OK);
+                } else {
+
+                    // There was an error deleting the specified home or during the cascading delete action
+                    // of the associated locations, devices, and/or temperature readings.
+                    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+
+            } else {
+                // The specified home was not found. Return an error.
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
 
         } catch (EmptyResultDataAccessException exception) {
             // The specified home was not found. Return an error.
@@ -76,35 +79,33 @@ public class DeleteService {
 
         try {
 
-            System.out.println("Total Locations: " + locationDao.countTotalLocations(locationId));
-            System.out.println("Total Devices: " + locationDao.countTotalDevices(locationId));
-            System.out.println("Total Temperature Readings: " + locationDao.countTotalTemperatureReadings(locationId));
+            Optional<LocationEntity> locationEntity = locationDao.findById(locationId);
 
-            int totalLocations = locationDao.countTotalLocations(locationId);
-            int totalDevices = locationDao.countTotalDevices(locationId);
-            int totalTemperatureReadings = locationDao.countTotalTemperatureReadings(locationId);
-
-//            Optional<LocationEntity> locationEntity = locationDao.findById(locationId);
-//
-//            if (locationEntity.isPresent()) {
-//
-//                // Get the list of devices registered with the location.
-//                List<DeviceEntity> devices = getInfoService.getAllDevicesByLocationId(locationId);
-//
-//                deleteLocationById(locationId);
-//
-//                return new ResponseEntity<>(
-//                        new DeleteLocationResponseEntity(locationId, devices.size(),
-//                                locationEntity.get().getHomeEntity().getId()), HttpStatus.OK);
-//
-//            } else {
-//                // The specified location was not found. Return an error.
-//                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//            }
+            if (locationEntity.isPresent()) {
 
 
+                int totalDevicesBeforeDelete = locationDao.countTotalDevices(locationId);
 
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                // Delete the specified location.
+                // This action will cascade and delete all associated devices and temperature readings.
+                deleteLocationById(locationId);
+
+                int totalLocationsAfterDelete = locationDao.countTotalLocations(locationId);
+                int totalDevicesAfterDelete = locationDao.countTotalDevices(locationId);
+                int totalTemperatureReadingsAfterDelete = locationDao.countTotalTemperatureReadings(locationId);
+
+                if (totalLocationsAfterDelete == 0 && totalDevicesAfterDelete == 0 && totalTemperatureReadingsAfterDelete == 0) {
+                    return new ResponseEntity<>(
+                            new DeleteLocationResponseEntity(locationId, totalDevicesBeforeDelete,
+                                    locationEntity.get().getHomeEntity().getId()), HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+
+            } else {
+                // The specified location was not found. Return an error.
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
 
         } catch (EmptyResultDataAccessException exception) {
             // The specified location was not found. Return an error.
@@ -115,26 +116,36 @@ public class DeleteService {
     @Transactional
     public ResponseEntity<DeleteDeviceResponseEntity> deleteDevice(int deviceId) throws EmptyResultDataAccessException {
 
-        System.out.println("Total Devices: " + deviceDao.countTotalDevices(deviceId));
-        System.out.println("Total Temperature Readings: " + deviceDao.countTotalTemperatureReadings(deviceId));
-
-        int totalDevices = deviceDao.countTotalDevices(deviceId);
-        int totalTemperatureReadings = deviceDao.countTotalTemperatureReadings(deviceId);
-
         try {
-//            Optional<DeviceEntity> deviceEntity = deviceDao.findById(deviceId);
-//
-//            if (deviceEntity.isPresent()) {
-//                DeleteDeviceResponseEntity deleteDeviceResponse =
-//                        new DeleteDeviceResponseEntity(deviceEntity.get().getId(), deviceEntity.get().getLocationEntity().getId());
-//                deleteDeviceById(deviceId);
-//                return new ResponseEntity<>(deleteDeviceResponse, HttpStatus.OK);
-//            } else {
-//                // The specified device was not found. Return an error.
-//                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//            }
+            Optional<DeviceEntity> deviceEntity = deviceDao.findById(deviceId);
 
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            if (deviceEntity.isPresent()) {
+
+                // Create the return object.
+                DeleteDeviceResponseEntity deleteDeviceResponse =
+                        new DeleteDeviceResponseEntity(deviceId, deviceEntity.get().getLocationEntity().getId());
+
+                // Delete the specified device.
+                // This action will cascade and delete all associated temperature readings.
+                deleteDeviceById(deviceId);
+
+                // Verify the device and temperature readings were deleted.
+                int totalDevices = deviceDao.countTotalDevices(deviceId);
+                int totalTemperatureReadings = deviceDao.countTotalTemperatureReadings(deviceId);
+
+                if (totalDevices == 0 && totalTemperatureReadings == 0) {
+
+                    // The specified device and associated temperature readings were deleted.
+                    return new ResponseEntity<>(deleteDeviceResponse, HttpStatus.OK);
+                } else {
+                    // There was an error deleting the device or associated temperature readings.
+                    // Return an error.
+                    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } else {
+                // The specified device was not found. Return an error.
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
 
         } catch (EmptyResultDataAccessException exception) {
             // The specified device was not found. Return an error.

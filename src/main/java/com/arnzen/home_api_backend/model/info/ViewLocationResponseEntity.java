@@ -1,7 +1,6 @@
 package com.arnzen.home_api_backend.model.info;
 
-import com.arnzen.home_api_backend.model.GetDeviceResponse;
-import com.arnzen.home_api_backend.model.base.DeviceEntity;
+import com.arnzen.home_api_backend.model.reducedData.GetDeviceResponse;
 
 import java.util.List;
 

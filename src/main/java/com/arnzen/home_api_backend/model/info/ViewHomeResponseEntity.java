@@ -1,6 +1,6 @@
 package com.arnzen.home_api_backend.model.info;
 
-import com.arnzen.home_api_backend.model.GetLocationResponse;
+import com.arnzen.home_api_backend.model.reducedData.GetLocationResponse;
 
 import java.util.List;
 
