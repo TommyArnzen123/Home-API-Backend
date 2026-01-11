@@ -7,13 +7,15 @@ import java.util.List;
 public class ViewLocationResponseEntity {
 
     private int locationId;
+    private int homeId;
     private String locationName;
     private List<GetDeviceResponse> devices;
 
     public ViewLocationResponseEntity() {}
 
-    public ViewLocationResponseEntity(int locationId, String locationName, List<GetDeviceResponse> devices) {
+    public ViewLocationResponseEntity(int locationId, int homeId, String locationName, List<GetDeviceResponse> devices) {
         this.locationId = locationId;
+        this.homeId = homeId;
         this.locationName = locationName;
         this.devices = devices;
     }
@@ -40,5 +42,13 @@ public class ViewLocationResponseEntity {
 
     public void setLocationName(String locationName) {
         this.locationName = locationName;
+    }
+
+    public int getHomeId() {
+        return homeId;
+    }
+
+    public void setHomeId(int homeId) {
+        this.homeId = homeId;
     }
 }

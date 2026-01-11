@@ -92,7 +92,8 @@ public class GetInfoService {
         if (location.isPresent()) {
 
             return new ResponseEntity<>(new ViewLocationResponseEntity(locationId,
-                    location.get().getLocationName(), formatDevices(locationId)), HttpStatus.OK);
+                    location.get().getHomeEntity().getId(), location.get().getLocationName(),
+                    formatDevices(locationId)), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
