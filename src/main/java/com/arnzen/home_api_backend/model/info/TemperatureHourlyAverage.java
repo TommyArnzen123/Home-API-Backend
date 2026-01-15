@@ -1,4 +1,4 @@
-package com.arnzen.home_api_backend.model;
+package com.arnzen.home_api_backend.model.info;
 
 public class TemperatureHourlyAverage {
     private int hour;

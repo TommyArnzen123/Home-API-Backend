@@ -1,13 +1,10 @@
 package com.arnzen.home_api_backend.service;
 
 import com.arnzen.home_api_backend.dao.*;
-import com.arnzen.home_api_backend.model.*;
 import com.arnzen.home_api_backend.model.base.*;
-import com.arnzen.home_api_backend.model.info.HomeScreenInfoResponseEntity;
-import com.arnzen.home_api_backend.model.info.ViewDeviceResponseEntity;
-import com.arnzen.home_api_backend.model.info.ViewHomeResponseEntity;
-import com.arnzen.home_api_backend.model.info.ViewLocationResponseEntity;
+import com.arnzen.home_api_backend.model.info.*;
 import com.arnzen.home_api_backend.model.reducedData.GetDeviceResponse;
+import com.arnzen.home_api_backend.model.reducedData.GetHomeResponse;
 import com.arnzen.home_api_backend.model.reducedData.GetLocationResponse;
 import com.arnzen.home_api_backend.model.reducedData.GetTemperatureResponse;
 import org.springframework.beans.factory.annotation.Autowired;

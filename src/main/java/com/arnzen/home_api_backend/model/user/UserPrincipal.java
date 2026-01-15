@@ -1,4 +1,4 @@
-package com.arnzen.home_api_backend.model;
+package com.arnzen.home_api_backend.model.user;
 
 import com.arnzen.home_api_backend.model.base.UserEntity;
 import org.springframework.security.core.GrantedAuthority;

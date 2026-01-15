@@ -1,7 +1,5 @@
 package com.arnzen.home_api_backend.model.info;
 
-import com.arnzen.home_api_backend.model.TemperatureHourlyAverage;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

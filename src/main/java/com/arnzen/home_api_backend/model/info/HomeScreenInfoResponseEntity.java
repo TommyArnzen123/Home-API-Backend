@@ -1,6 +1,6 @@
 package com.arnzen.home_api_backend.model.info;
 
-import com.arnzen.home_api_backend.model.GetHomeResponse;
+import com.arnzen.home_api_backend.model.reducedData.GetHomeResponse;
 
 import java.util.List;
 
