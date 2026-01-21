@@ -58,7 +58,7 @@ public class GetInfoService {
                 formattedHomes.add(new GetHomeResponse(home.getId(), userId, home.getHomeName()));
             };
 
-            return new ResponseEntity<>(new HomeScreenInfoResponseEntity(formattedHomes,
+            return new ResponseEntity<>(new HomeScreenInfoResponseEntity(user.get().getId(), formattedHomes,
                     totalLocations, totalDevices), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

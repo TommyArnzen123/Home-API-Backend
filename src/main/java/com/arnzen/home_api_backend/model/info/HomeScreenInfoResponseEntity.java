@@ -6,6 +6,7 @@ import java.util.List;
 
 public class HomeScreenInfoResponseEntity {
 
+    private int userId;
     private List<GetHomeResponse> homes;
     private int numLocations;
     private int numDevices;
@@ -13,7 +14,8 @@ public class HomeScreenInfoResponseEntity {
     public HomeScreenInfoResponseEntity() {
     }
 
-    public HomeScreenInfoResponseEntity(List<GetHomeResponse> homes, int numLocations, int numDevices) {
+    public HomeScreenInfoResponseEntity(int userId, List<GetHomeResponse> homes, int numLocations, int numDevices) {
+        this.userId = userId;
         this.homes = homes;
         this.numLocations = numLocations;
         this.numDevices = numDevices;
@@ -41,5 +43,13 @@ public class HomeScreenInfoResponseEntity {
 
     public void setNumDevices(int numDevices) {
         this.numDevices = numDevices;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }
