@@ -4,6 +4,7 @@ import com.arnzen.home_api_backend.dao.DeviceDao;
 import com.arnzen.home_api_backend.dao.TemperatureDao;
 import com.arnzen.home_api_backend.model.base.DeviceEntity;
 import com.arnzen.home_api_backend.model.base.TemperatureEntity;
+import com.arnzen.home_api_backend.model.reducedData.GetTemperatureResponse;
 import com.arnzen.home_api_backend.model.temperature.SaveTemperatureInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class TemperatureService {
     @Autowired
     TemperatureDao temperatureDao;
 
-    public ResponseEntity<TemperatureEntity> saveTemperatureByDevice(SaveTemperatureInfo registerTemperatureInfo) {
+    public ResponseEntity<GetTemperatureResponse> saveTemperatureByDevice(SaveTemperatureInfo registerTemperatureInfo) {
         Optional<DeviceEntity> device = deviceDao.findById(registerTemperatureInfo.getDeviceId());
         if (device.isPresent()) {
             TemperatureEntity temperature = new TemperatureEntity();
@@ -30,7 +31,10 @@ public class TemperatureService {
             temperature.setTemperature(registerTemperatureInfo.getTemperature());
             temperature.setDateRecorded(LocalDateTime.now());
             TemperatureEntity newTemperature = temperatureDao.save(temperature);
-            return new ResponseEntity<>(newTemperature, HttpStatus.OK);
+            GetTemperatureResponse temperatureResponse =
+                    new GetTemperatureResponse(newTemperature.getId(),
+                            newTemperature.getTemperature(), newTemperature.getDateRecorded());
+            return new ResponseEntity<>(temperatureResponse, HttpStatus.OK);
         } else {
 
             // The device was not found in the database.

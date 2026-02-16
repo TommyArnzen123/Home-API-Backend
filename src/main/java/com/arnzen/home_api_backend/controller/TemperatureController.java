@@ -1,5 +1,6 @@
 package com.arnzen.home_api_backend.controller;
 
+import com.arnzen.home_api_backend.model.reducedData.GetTemperatureResponse;
 import com.arnzen.home_api_backend.model.temperature.SaveTemperatureInfo;
 import com.arnzen.home_api_backend.model.base.TemperatureEntity;
 import com.arnzen.home_api_backend.service.TemperatureService;
@@ -18,7 +19,7 @@ public class TemperatureController {
     TemperatureService temperatureService;
 
     @PostMapping("save")
-    public ResponseEntity<TemperatureEntity> saveTemperatureByDevice(@RequestBody SaveTemperatureInfo temperatureInfo) {
+    public ResponseEntity<GetTemperatureResponse> saveTemperatureByDevice(@RequestBody SaveTemperatureInfo temperatureInfo) {
         return temperatureService.saveTemperatureByDevice(temperatureInfo);
     }
 }

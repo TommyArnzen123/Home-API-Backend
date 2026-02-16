@@ -5,13 +5,17 @@ public class GetHomeResponse {
     private int homeId;
     private int userId;
     private String homeName;
+    private int totalLocations;
+    private int totalDevices;
 
     public GetHomeResponse() {}
 
-    public GetHomeResponse(int homeId, int userId, String homeName) {
+    public GetHomeResponse(int homeId, int userId, String homeName, int totalLocations, int totalDevices) {
         this.homeId = homeId;
         this.userId = userId;
         this.homeName = homeName;
+        this.totalLocations = totalLocations;
+        this.totalDevices = totalDevices;
     }
 
     public int getHomeId() {
@@ -36,5 +40,21 @@ public class GetHomeResponse {
 
     public void setHomeName(String homeName) {
         this.homeName = homeName;
+    }
+
+    public int getTotalLocations() {
+        return totalLocations;
+    }
+
+    public void setTotalLocations(int totalLocations) {
+        this.totalLocations = totalLocations;
+    }
+
+    public int getTotalDevices() {
+        return totalDevices;
+    }
+
+    public void setTotalDevices(int totalDevices) {
+        this.totalDevices = totalDevices;
     }
 }

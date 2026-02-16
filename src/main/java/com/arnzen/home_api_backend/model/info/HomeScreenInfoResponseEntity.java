@@ -8,17 +8,13 @@ public class HomeScreenInfoResponseEntity {
 
     private int userId;
     private List<GetHomeResponse> homes;
-    private int numLocations;
-    private int numDevices;
 
     public HomeScreenInfoResponseEntity() {
     }
 
-    public HomeScreenInfoResponseEntity(int userId, List<GetHomeResponse> homes, int numLocations, int numDevices) {
+    public HomeScreenInfoResponseEntity(int userId, List<GetHomeResponse> homes) {
         this.userId = userId;
         this.homes = homes;
-        this.numLocations = numLocations;
-        this.numDevices = numDevices;
     }
 
     public List<GetHomeResponse> getHomes() {
@@ -27,22 +23,6 @@ public class HomeScreenInfoResponseEntity {
 
     public void setHomes(List<GetHomeResponse> homes) {
         this.homes = homes;
-    }
-
-    public int getNumLocations() {
-        return numLocations;
-    }
-
-    public void setNumLocations(int numLocations) {
-        this.numLocations = numLocations;
-    }
-
-    public int getNumDevices() {
-        return numDevices;
-    }
-
-    public void setNumDevices(int numDevices) {
-        this.numDevices = numDevices;
     }
 
     public int getUserId() {

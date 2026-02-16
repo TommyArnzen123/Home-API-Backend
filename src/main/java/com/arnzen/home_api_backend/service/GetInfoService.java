@@ -49,17 +49,13 @@ public class GetInfoService {
             List<HomeEntity> homes = homeDao.findAllByUserEntityId(userId);
             List<GetHomeResponse> formattedHomes = new ArrayList<>();
 
-            int totalLocations = 0;
-            int totalDevices = 0;
-
             for (HomeEntity home : homes) {
-                totalLocations += homeDao.countTotalLocations(home.getId());
-                totalDevices += homeDao.countTotalDevices(home.getId());
-                formattedHomes.add(new GetHomeResponse(home.getId(), userId, home.getHomeName()));
+                int totalLocations = homeDao.countTotalLocations(home.getId());
+                int totalDevices = homeDao.countTotalDevices(home.getId());
+                formattedHomes.add(new GetHomeResponse(home.getId(), userId, home.getHomeName(), totalLocations, totalDevices));
             };
 
-            return new ResponseEntity<>(new HomeScreenInfoResponseEntity(user.get().getId(), formattedHomes,
-                    totalLocations, totalDevices), HttpStatus.OK);
+            return new ResponseEntity<>(new HomeScreenInfoResponseEntity(user.get().getId(), formattedHomes), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
