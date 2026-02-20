@@ -67,11 +67,9 @@ public class GetInfoService {
 
         if (home.isPresent()) {
 
-            int totalDevices = homeDao.countTotalDevices(homeId);
-
             // Generate the home response object.
             return new ResponseEntity<>(new ViewHomeResponseEntity(homeId, home.get().getHomeName(),
-                    formatLocations(homeId), totalDevices), HttpStatus.OK);
+                    formatLocations(homeId)), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -105,7 +103,7 @@ public class GetInfoService {
             int locationId = deviceEntity.get().getLocationEntity().getId();
 
             // Get the most recent temperature for the specified device.
-            TemperatureEntity mostRecentTemperature = temperatureDao.getMostRecentTemperatureByDeviceId(deviceId);
+            TemperatureEntity mostRecentTemperature = temperatureDao.getMostRecentTemperatureByDeviceId(deviceId, LocalDateTime.now().minusMinutes(10));
 
             // Get average hourly temperatures (for the past 24 hours) for the specified device.
             List<TemperatureHourlyAverage> averageHourlyTemperaturesCurrentDay =
@@ -155,7 +153,7 @@ public class GetInfoService {
 
         List<GetDeviceResponse> formattedDevices = new ArrayList<>();
         devices.forEach(device -> {
-            TemperatureEntity mostRecentTemperature = temperatureDao.getMostRecentTemperatureByDeviceId(device.getId());
+            TemperatureEntity mostRecentTemperature = temperatureDao.getMostRecentTemperatureByDeviceId(device.getId(), LocalDateTime.now().minusMinutes(10));
             GetTemperatureResponse temperatureResponse = null;
 
             if (mostRecentTemperature != null) {

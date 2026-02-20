@@ -15,8 +15,11 @@ public interface TemperatureDao extends JpaRepository<TemperatureEntity, Integer
             "FROM TemperatureEntity m WHERE m.dateRecorded > :dateTime AND m.deviceEntity.id = :deviceId GROUP BY HOUR(m.dateRecorded) ORDER BY HOUR(m.dateRecorded)")
     List<TemperatureHourlyAverage> findAverageTemperaturePastTwentyFourHours(@Param("deviceId") int deviceId, @Param("dateTime") LocalDateTime twentyFourHoursAgo);
 
-    @Query("SELECT temp from TemperatureEntity temp WHERE temp.deviceEntity.id = :deviceId ORDER BY temp.id DESC LIMIT 1")
-    TemperatureEntity getMostRecentTemperatureByDeviceId(@Param("deviceId") int deviceId);
+//    @Query("SELECT temp from TemperatureEntity temp WHERE temp.deviceEntity.id = :deviceId ORDER BY temp.id DESC LIMIT 1")
+//    TemperatureEntity getMostRecentTemperatureByDeviceId(@Param("deviceId") int deviceId);
+
+    @Query("SELECT temp from TemperatureEntity temp WHERE temp.deviceEntity.id = :deviceId AND temp.dateRecorded > :dateTime ORDER BY temp.id DESC LIMIT 1")
+    TemperatureEntity getMostRecentTemperatureByDeviceId(@Param("deviceId") int deviceId, @Param("dateTime") LocalDateTime twentyFourHoursAgo);
 
     void deleteAllByDeviceEntityId(int deviceEntityId);
 

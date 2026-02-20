@@ -9,16 +9,14 @@ public class ViewHomeResponseEntity {
     private int homeId;
     private String homeName;
     private List<GetLocationResponse> locations;
-    private int numDevices;
 
     public ViewHomeResponseEntity() {
     }
 
-    public ViewHomeResponseEntity(int homeId, String homeName, List<GetLocationResponse> locations, int numDevices) {
+    public ViewHomeResponseEntity(int homeId, String homeName, List<GetLocationResponse> locations) {
         this.homeId = homeId;
         this.homeName = homeName;
         this.locations = locations;
-        this.numDevices = numDevices;
     }
 
     public String getHomeName() {
@@ -43,13 +41,5 @@ public class ViewHomeResponseEntity {
 
     public void setLocations(List<GetLocationResponse> locations) {
         this.locations = locations;
-    }
-
-    public int getNumDevices() {
-        return numDevices;
-    }
-
-    public void setNumDevices(int numDevices) {
-        this.numDevices = numDevices;
     }
 }
