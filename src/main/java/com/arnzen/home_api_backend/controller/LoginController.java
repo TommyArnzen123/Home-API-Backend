@@ -1,9 +1,11 @@
 package com.arnzen.home_api_backend.controller;
 
+import com.arnzen.home_api_backend.model.login.LoginResponse;
 import com.arnzen.home_api_backend.model.login.LoginUserInfo;
 import com.arnzen.home_api_backend.model.base.UserEntity;
 import com.arnzen.home_api_backend.service.GetInfoService;
 import com.arnzen.home_api_backend.service.JwtService;
+import com.arnzen.home_api_backend.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,30 +23,10 @@ import java.util.Map;
 public class LoginController {
 
     @Autowired
-    private GetInfoService getInfoService;
-
-    @Autowired
-    private JwtService jwtService;
-
-    @Autowired
-    AuthenticationManager authenticationManager;
+    LoginService loginService;
 
     @PostMapping("login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginUserInfo loginUserInfo) {
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginUserInfo.getUsername(), loginUserInfo.getPassword()));
-
-        if(authentication.isAuthenticated()) {
-            UserEntity userEntity = getInfoService.getUserEntityByUsername(loginUserInfo.getUsername());
-
-            Map<String, String> loginResponse = new HashMap<>();
-            loginResponse.put("jwtToken", jwtService.generateToken(loginUserInfo.getUsername()));
-            loginResponse.put("userId", Integer.toString(userEntity.getId()));
-            loginResponse.put("username", userEntity.getUsername());
-            loginResponse.put("firstName", userEntity.getFirstName());
-            return new ResponseEntity<>(loginResponse, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginUserInfo loginUserInfo) {
+        return this.loginService.login(loginUserInfo);
     }
 }

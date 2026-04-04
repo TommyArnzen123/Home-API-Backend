@@ -6,6 +6,7 @@ import java.util.List;
 public class ViewDeviceResponseEntity {
     int deviceId;
     int locationId;
+    int homeId;
     String deviceName;
     double mostRecentTemperature;
     LocalDateTime mostRecentTemperatureAvailableDateTime;
@@ -14,11 +15,12 @@ public class ViewDeviceResponseEntity {
 
     public ViewDeviceResponseEntity() {}
 
-    public ViewDeviceResponseEntity(int deviceId, int locationId, String deviceName,
+    public ViewDeviceResponseEntity(int deviceId, int locationId, int homeId, String deviceName,
                                     double mostRecentTemperature, LocalDateTime mostRecentTemperatureAvailableDateTime,
                                     boolean mostRecentTemperatureAvailable, List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay) {
         this.deviceId = deviceId;
         this.locationId = locationId;
+        this.homeId = homeId;
         this.deviceName = deviceName;
         this.mostRecentTemperature = mostRecentTemperature;
         this.mostRecentTemperatureAvailableDateTime = mostRecentTemperatureAvailableDateTime;
@@ -40,6 +42,14 @@ public class ViewDeviceResponseEntity {
 
     public void setLocationId(int locationId) {
         this.locationId = locationId;
+    }
+
+    public int getHomeId() {
+        return homeId;
+    }
+
+    public void setHomeId(int homeId) {
+        this.homeId = homeId;
     }
 
     public String getDeviceName() {

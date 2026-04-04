@@ -101,6 +101,7 @@ public class GetInfoService {
 
             String deviceName = deviceEntity.get().getDeviceName();
             int locationId = deviceEntity.get().getLocationEntity().getId();
+            int homeId = deviceEntity.get().getLocationEntity().getHomeEntity().getId();
 
             // Get the most recent temperature for the specified device.
             TemperatureEntity mostRecentTemperature = temperatureDao.getMostRecentTemperatureByDeviceId(deviceId, LocalDateTime.now().minusMinutes(10));
@@ -112,6 +113,7 @@ public class GetInfoService {
             viewDeviceResponse.setDeviceId(deviceId);
             viewDeviceResponse.setDeviceName(deviceName);
             viewDeviceResponse.setLocationId(locationId);
+            viewDeviceResponse.setHomeId(homeId);
             viewDeviceResponse.setAverageTemperaturesByHourCurrentDay(averageHourlyTemperaturesCurrentDay);
 
             if (mostRecentTemperature == null) {
