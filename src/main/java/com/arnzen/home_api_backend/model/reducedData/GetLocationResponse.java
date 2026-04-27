@@ -1,5 +1,7 @@
 package com.arnzen.home_api_backend.model.reducedData;
 
+import com.arnzen.home_api_backend.model.base.TemperatureThresholdEntity;
+
 import java.util.List;
 
 public class GetLocationResponse {
@@ -7,14 +9,16 @@ public class GetLocationResponse {
     private int homeId;
     private String locationName;
     private List<GetDeviceResponse> devices;
+    private GetTemperatureThresholdResponse threshold;
 
     public GetLocationResponse() {}
 
-    public GetLocationResponse(int locationId, int homeId, String locationName, List<GetDeviceResponse> devices) {
+    public GetLocationResponse(int locationId, int homeId, String locationName, List<GetDeviceResponse> devices, GetTemperatureThresholdResponse threshold) {
         this.locationId = locationId;
         this.homeId = homeId;
         this.locationName = locationName;
         this.devices = devices;
+        this.threshold = threshold;
     }
 
     public int getLocationId() {
@@ -47,5 +51,13 @@ public class GetLocationResponse {
 
     public void setDevices(List<GetDeviceResponse> devices) {
         this.devices = devices;
+    }
+
+    public GetTemperatureThresholdResponse getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(GetTemperatureThresholdResponse threshold) {
+        this.threshold = threshold;
     }
 }

@@ -6,7 +6,7 @@ import com.arnzen.home_api_backend.dao.LocationDao;
 import com.arnzen.home_api_backend.dao.DeviceDao;
 import com.arnzen.home_api_backend.model.base.HomeEntity;
 import com.arnzen.home_api_backend.model.registration.RegisterItem;
-import com.arnzen.home_api_backend.model.registration.RegistrationResponse;
+import com.arnzen.home_api_backend.model.messageResponse.MessageResponse;
 import com.arnzen.home_api_backend.model.base.UserEntity;
 import com.arnzen.home_api_backend.model.base.LocationEntity;
 import com.arnzen.home_api_backend.model.base.DeviceEntity;
@@ -34,7 +34,7 @@ public class RegistrationService {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-    public ResponseEntity<RegistrationResponse> registerUser(UserEntity user) {
+    public ResponseEntity<MessageResponse> registerUser(UserEntity user) {
 
         // Get the username entered by the user.
         String normalizedUser = user.getUsername().toLowerCase();
@@ -57,7 +57,7 @@ public class RegistrationService {
         return new ResponseEntity<>(generateRegistrationResponse("User added successfully."), HttpStatus.OK);
     }
 
-    public ResponseEntity<RegistrationResponse> registerHome(RegisterItem homeInfo) {
+    public ResponseEntity<MessageResponse> registerHome(RegisterItem homeInfo) {
         Optional<UserEntity> user = userDao.findById(homeInfo.getParentEntityId());
 
         // The user was found in the database. Add the home.
@@ -73,7 +73,7 @@ public class RegistrationService {
         }
     }
 
-    public ResponseEntity<RegistrationResponse> registerLocation(RegisterItem locationInfo) {
+    public ResponseEntity<MessageResponse> registerLocation(RegisterItem locationInfo) {
         Optional<HomeEntity> home = homeDao.findById(locationInfo.getParentEntityId());
 
         // The home was found in the database. Add the location.
@@ -89,7 +89,7 @@ public class RegistrationService {
         }
     }
 
-    public ResponseEntity<RegistrationResponse> registerDevice(RegisterItem deviceInfo) {
+    public ResponseEntity<MessageResponse> registerDevice(RegisterItem deviceInfo) {
         Optional<LocationEntity> location = locationDao.findById(deviceInfo.getParentEntityId());
 
         // The location was found in the database. Add the device.
@@ -106,7 +106,7 @@ public class RegistrationService {
         }
     }
 
-    private RegistrationResponse generateRegistrationResponse(String message) {
-        return new RegistrationResponse(message);
+    private MessageResponse generateRegistrationResponse(String message) {
+        return new MessageResponse(message);
     }
 }

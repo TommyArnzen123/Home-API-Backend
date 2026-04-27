@@ -1,12 +1,12 @@
-package com.arnzen.home_api_backend.model.registration;
+package com.arnzen.home_api_backend.model.messageResponse;
 
-public class RegistrationResponse {
+public class MessageResponse {
 
     private String message;
 
-    public RegistrationResponse() {}
+    public MessageResponse() {}
 
-    public RegistrationResponse(String message) {
+    public MessageResponse(String message) {
         this.message = message;
     }
 

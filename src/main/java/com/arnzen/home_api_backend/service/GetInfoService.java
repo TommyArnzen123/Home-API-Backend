@@ -3,10 +3,7 @@ package com.arnzen.home_api_backend.service;
 import com.arnzen.home_api_backend.dao.*;
 import com.arnzen.home_api_backend.model.base.*;
 import com.arnzen.home_api_backend.model.info.*;
-import com.arnzen.home_api_backend.model.reducedData.GetDeviceResponse;
-import com.arnzen.home_api_backend.model.reducedData.GetHomeResponse;
-import com.arnzen.home_api_backend.model.reducedData.GetLocationResponse;
-import com.arnzen.home_api_backend.model.reducedData.GetTemperatureResponse;
+import com.arnzen.home_api_backend.model.reducedData.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -142,6 +139,15 @@ public class GetInfoService {
             locationResponse.setHomeId(location.getHomeEntity().getId());
             locationResponse.setLocationName(location.getLocationName());
             locationResponse.setDevices(formatDevices(location.getId()));
+            if (location.getTemperatureThresholdEntity() != null) {
+                GetTemperatureThresholdResponse threshold =
+                        new GetTemperatureThresholdResponse(
+                                location.getTemperatureThresholdEntity().getMinimumTemperature(),
+                                location.getTemperatureThresholdEntity().getMaximumTemperature());
+                locationResponse.setThreshold(threshold);
+            } else {
+                locationResponse.setThreshold(null);
+            }
             formattedLocations.add(locationResponse);
         });
 

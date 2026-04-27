@@ -19,15 +19,19 @@ public class LocationEntity {
     @OneToMany(mappedBy = "locationEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeviceEntity> devices = new ArrayList<>();
 
+    @OneToOne(mappedBy = "locationEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private TemperatureThresholdEntity temperatureThresholdEntity;
+
     private String locationName;
 
     public LocationEntity() {
     }
 
-    public LocationEntity(int id, HomeEntity homeEntity, List<DeviceEntity> devices, String locationName) {
+    public LocationEntity(int id, HomeEntity homeEntity, List<DeviceEntity> devices, TemperatureThresholdEntity temperatureThresholdEntity, String locationName) {
         this.id = id;
         this.homeEntity = homeEntity;
         this.devices = devices;
+        this.temperatureThresholdEntity = temperatureThresholdEntity;
         this.locationName = locationName;
     }
 
@@ -61,5 +65,13 @@ public class LocationEntity {
 
     public void setDevices(List<DeviceEntity> devices) {
         this.devices = devices;
+    }
+
+    public TemperatureThresholdEntity getTemperatureThresholdEntity() {
+        return temperatureThresholdEntity;
+    }
+
+    public void setTemperatureThresholdEntity(TemperatureThresholdEntity temperatureThresholdEntity) {
+        this.temperatureThresholdEntity = temperatureThresholdEntity;
     }
 }
