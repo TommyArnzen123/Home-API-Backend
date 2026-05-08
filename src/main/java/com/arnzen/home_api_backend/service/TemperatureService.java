@@ -81,11 +81,11 @@ public class TemperatureService {
 
                 if ((minimumTemperature != null && temperature < minimumTemperature)
                         || (maximumTemperature != null && temperature > maximumTemperature)) {
-                    generateTemperatureThresholdNotificationEmail(
-                            device.get(),
-                            temperature,
-                            minimumTemperature,
-                            maximumTemperature);
+//                    generateTemperatureThresholdNotificationEmail(
+//                            device.get(),
+//                            temperature,
+//                            minimumTemperature,
+//                            maximumTemperature);
                 }
             }
         }

@@ -1,15 +1,15 @@
 package com.arnzen.home_api_backend.model.temperature;
 
-public class TemperatureThresholdRequest {
+public class TemperatureThreshold {
 
     private Integer id;
     private Double minimumTemperature;
     private Double maximumTemperature;
     private Integer locationId;
 
-    public TemperatureThresholdRequest() {}
+    public TemperatureThreshold() {}
 
-    public TemperatureThresholdRequest(Integer id, Double minimumTemperature, Double maximumTemperature, Integer locationId) {
+    public TemperatureThreshold(Integer id, Double minimumTemperature, Double maximumTemperature, Integer locationId) {
         this.id = id;
         this.minimumTemperature = minimumTemperature;
         this.maximumTemperature = maximumTemperature;

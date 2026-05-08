@@ -1,7 +1,7 @@
 package com.arnzen.home_api_backend.controller;
 
 import com.arnzen.home_api_backend.model.messageResponse.MessageResponse;
-import com.arnzen.home_api_backend.model.temperature.TemperatureThresholdRequest;
+import com.arnzen.home_api_backend.model.temperature.TemperatureThreshold;
 import com.arnzen.home_api_backend.service.TemperatureThresholdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +15,12 @@ public class TemperatureThresholdController {
     TemperatureThresholdService temperatureThresholdService;
 
     @PostMapping()
-    public ResponseEntity<MessageResponse> addTemperatureThreshold(@RequestBody TemperatureThresholdRequest threshold) {
+    public ResponseEntity<TemperatureThreshold> addTemperatureThreshold(@RequestBody TemperatureThreshold threshold) {
         return this.temperatureThresholdService.addTemperatureThreshold(threshold);
     }
 
     @PutMapping()
-    public ResponseEntity<MessageResponse> updateTemperatureThreshold(@RequestBody TemperatureThresholdRequest threshold) {
+    public ResponseEntity<MessageResponse> updateTemperatureThreshold(@RequestBody TemperatureThreshold threshold) {
         return this.temperatureThresholdService.updateTemperatureThreshold(threshold);
     }
 

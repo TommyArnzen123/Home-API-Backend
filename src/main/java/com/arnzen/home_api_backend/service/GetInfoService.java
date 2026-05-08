@@ -4,6 +4,7 @@ import com.arnzen.home_api_backend.dao.*;
 import com.arnzen.home_api_backend.model.base.*;
 import com.arnzen.home_api_backend.model.info.*;
 import com.arnzen.home_api_backend.model.reducedData.*;
+import com.arnzen.home_api_backend.model.temperature.TemperatureThreshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,9 +80,21 @@ public class GetInfoService {
 
         if (location.isPresent()) {
 
+            TemperatureThreshold threshold =
+                    new TemperatureThreshold();
+
+            if (location.get().getTemperatureThresholdEntity() != null) {
+                threshold.setId(location.get().getTemperatureThresholdEntity().getId());
+                threshold.setMinimumTemperature(location.get().getTemperatureThresholdEntity().getMinimumTemperature());
+                threshold.setMaximumTemperature(location.get().getTemperatureThresholdEntity().getMaximumTemperature());
+                threshold.setLocationId(location.get().getTemperatureThresholdEntity().getLocationEntity().getId());
+            } else {
+                threshold = null;
+            }
+
             return new ResponseEntity<>(new ViewLocationResponseEntity(locationId,
                     location.get().getHomeEntity().getId(), location.get().getLocationName(),
-                    formatDevices(locationId)), HttpStatus.OK);
+                    formatDevices(locationId), threshold), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -140,10 +153,12 @@ public class GetInfoService {
             locationResponse.setLocationName(location.getLocationName());
             locationResponse.setDevices(formatDevices(location.getId()));
             if (location.getTemperatureThresholdEntity() != null) {
-                GetTemperatureThresholdResponse threshold =
-                        new GetTemperatureThresholdResponse(
+                TemperatureThreshold threshold =
+                        new TemperatureThreshold(
+                                location.getTemperatureThresholdEntity().getId(),
                                 location.getTemperatureThresholdEntity().getMinimumTemperature(),
-                                location.getTemperatureThresholdEntity().getMaximumTemperature());
+                                location.getTemperatureThresholdEntity().getMaximumTemperature(),
+                                location.getTemperatureThresholdEntity().getLocationEntity().getId());
                 locationResponse.setThreshold(threshold);
             } else {
                 locationResponse.setThreshold(null);
