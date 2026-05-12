@@ -1,5 +1,6 @@
 package com.arnzen.home_api_backend.model.info;
 
+import com.arnzen.home_api_backend.model.entityPath.EntityPathItem;
 import com.arnzen.home_api_backend.model.reducedData.GetLocationResponse;
 
 import java.util.List;
@@ -9,14 +10,16 @@ public class ViewHomeResponseEntity {
     private int homeId;
     private String homeName;
     private List<GetLocationResponse> locations;
+    private List<EntityPathItem> entityPath;
 
     public ViewHomeResponseEntity() {
     }
 
-    public ViewHomeResponseEntity(int homeId, String homeName, List<GetLocationResponse> locations) {
+    public ViewHomeResponseEntity(int homeId, String homeName, List<GetLocationResponse> locations, List<EntityPathItem> entityPath) {
         this.homeId = homeId;
         this.homeName = homeName;
         this.locations = locations;
+        this.entityPath = entityPath;
     }
 
     public String getHomeName() {
@@ -41,5 +44,13 @@ public class ViewHomeResponseEntity {
 
     public void setLocations(List<GetLocationResponse> locations) {
         this.locations = locations;
+    }
+
+    public List<EntityPathItem> getEntityPath() {
+        return entityPath;
+    }
+
+    public void setEntityPath(List<EntityPathItem> entityPath) {
+        this.entityPath = entityPath;
     }
 }

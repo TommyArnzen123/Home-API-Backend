@@ -2,6 +2,8 @@ package com.arnzen.home_api_backend.service;
 
 import com.arnzen.home_api_backend.dao.*;
 import com.arnzen.home_api_backend.model.base.*;
+import com.arnzen.home_api_backend.model.entityPath.EntityPathItem;
+import com.arnzen.home_api_backend.model.entityPath.EntityType;
 import com.arnzen.home_api_backend.model.info.*;
 import com.arnzen.home_api_backend.model.reducedData.*;
 import com.arnzen.home_api_backend.model.temperature.TemperatureThreshold;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +56,9 @@ public class GetInfoService {
                 formattedHomes.add(new GetHomeResponse(home.getId(), userId, home.getHomeName(), totalLocations, totalDevices));
             };
 
-            return new ResponseEntity<>(new HomeScreenInfoResponseEntity(user.get().getId(), formattedHomes), HttpStatus.OK);
+            List<EntityPathItem> entityPath = List.of();
+
+            return new ResponseEntity<>(new HomeScreenInfoResponseEntity(user.get().getId(), formattedHomes, entityPath), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -65,9 +70,11 @@ public class GetInfoService {
 
         if (home.isPresent()) {
 
+            EntityPathItem homePath = new EntityPathItem(homeId, EntityType.HOME);
+
             // Generate the home response object.
             return new ResponseEntity<>(new ViewHomeResponseEntity(homeId, home.get().getHomeName(),
-                    formatLocations(homeId)), HttpStatus.OK);
+                    formatLocations(homeId), List.of(homePath)), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -151,7 +158,10 @@ public class GetInfoService {
             locationResponse.setLocationId(location.getId());
             locationResponse.setHomeId(location.getHomeEntity().getId());
             locationResponse.setLocationName(location.getLocationName());
-            locationResponse.setDevices(formatDevices(location.getId()));
+            locationResponse.setNumDevices(location.getDevices().size());
+            locationResponse.setAverageTemperature(getAverageLocationTemperature(location.getDevices()));
+
+
             if (location.getTemperatureThresholdEntity() != null) {
                 TemperatureThreshold threshold =
                         new TemperatureThreshold(
@@ -189,5 +199,29 @@ public class GetInfoService {
         });
 
         return formattedDevices;
+    }
+
+    public Double getAverageLocationTemperature(List<DeviceEntity> devices) {
+        Double averageTemperature = null;
+        int totalTemperatures = 0;
+
+        for (DeviceEntity device : devices) {
+            TemperatureEntity mostRecentTemperature = temperatureDao.getMostRecentTemperatureByDeviceId(device.getId(), LocalDateTime.now().minusMinutes(10));
+
+            if (mostRecentTemperature != null) {
+                if (averageTemperature != null) {
+                    averageTemperature += mostRecentTemperature.getTemperature();   // Average temperature is set. Add to the set average temperature.
+                } else {
+                    averageTemperature = mostRecentTemperature.getTemperature();    // Average temperature is not set. Set the average temperature.
+                }
+                totalTemperatures++;
+            }
+        }
+
+        if (averageTemperature != null) {
+            return averageTemperature / totalTemperatures;
+        } else {
+            return averageTemperature;
+        }
     }
 }

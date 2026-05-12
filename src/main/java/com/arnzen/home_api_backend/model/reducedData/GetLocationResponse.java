@@ -9,16 +9,18 @@ public class GetLocationResponse {
     private int locationId;
     private int homeId;
     private String locationName;
-    private List<GetDeviceResponse> devices;
+    private int numDevices;
+    private Double averageTemperature;
     private TemperatureThreshold threshold;
 
     public GetLocationResponse() {}
 
-    public GetLocationResponse(int locationId, int homeId, String locationName, List<GetDeviceResponse> devices, TemperatureThreshold threshold) {
+    public GetLocationResponse(int locationId, int homeId, String locationName, int numDevices, Double averageTemperature, TemperatureThreshold threshold) {
         this.locationId = locationId;
         this.homeId = homeId;
         this.locationName = locationName;
-        this.devices = devices;
+        this.numDevices = numDevices;
+        this.averageTemperature = averageTemperature;
         this.threshold = threshold;
     }
 
@@ -46,12 +48,20 @@ public class GetLocationResponse {
         this.locationName = locationName;
     }
 
-    public List<GetDeviceResponse> getDevices() {
-        return devices;
+    public int getNumDevices() {
+        return numDevices;
     }
 
-    public void setDevices(List<GetDeviceResponse> devices) {
-        this.devices = devices;
+    public void setNumDevices(int numDevices) {
+        this.numDevices = numDevices;
+    }
+
+    public Double getAverageTemperature() {
+        return averageTemperature;
+    }
+
+    public void setAverageTemperature(Double averageTemperature) {
+        this.averageTemperature = averageTemperature;
     }
 
     public TemperatureThreshold getThreshold() {
