@@ -1,5 +1,7 @@
 package com.arnzen.home_api_backend.model.info;
 
+import com.arnzen.home_api_backend.model.entityPath.EntityPathItem;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,12 +14,11 @@ public class ViewDeviceResponseEntity {
     LocalDateTime mostRecentTemperatureAvailableDateTime;
     boolean mostRecentTemperatureAvailable;
     List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay;
+    private List<EntityPathItem> entityPath;
 
     public ViewDeviceResponseEntity() {}
 
-    public ViewDeviceResponseEntity(int deviceId, int locationId, int homeId, String deviceName,
-                                    double mostRecentTemperature, LocalDateTime mostRecentTemperatureAvailableDateTime,
-                                    boolean mostRecentTemperatureAvailable, List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay) {
+    public ViewDeviceResponseEntity(int deviceId, int locationId, int homeId, String deviceName, double mostRecentTemperature, LocalDateTime mostRecentTemperatureAvailableDateTime, boolean mostRecentTemperatureAvailable, List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay, List<EntityPathItem> entityPath) {
         this.deviceId = deviceId;
         this.locationId = locationId;
         this.homeId = homeId;
@@ -26,6 +27,7 @@ public class ViewDeviceResponseEntity {
         this.mostRecentTemperatureAvailableDateTime = mostRecentTemperatureAvailableDateTime;
         this.mostRecentTemperatureAvailable = mostRecentTemperatureAvailable;
         this.averageTemperaturesByHourCurrentDay = averageTemperaturesByHourCurrentDay;
+        this.entityPath = entityPath;
     }
 
     public int getDeviceId() {
@@ -90,5 +92,13 @@ public class ViewDeviceResponseEntity {
 
     public void setMostRecentTemperatureAvailableDateTime(LocalDateTime mostRecentTemperatureAvailableDateTime) {
         this.mostRecentTemperatureAvailableDateTime = mostRecentTemperatureAvailableDateTime;
+    }
+
+    public List<EntityPathItem> getEntityPath() {
+        return entityPath;
+    }
+
+    public void setEntityPath(List<EntityPathItem> entityPath) {
+        this.entityPath = entityPath;
     }
 }

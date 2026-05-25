@@ -56,7 +56,7 @@ public class GetInfoService {
                 formattedHomes.add(new GetHomeResponse(home.getId(), userId, home.getHomeName(), totalLocations, totalDevices));
             };
 
-            List<EntityPathItem> entityPath = List.of();
+            List<EntityPathItem> entityPath = List.of(new EntityPathItem(user.get().getId(), EntityType.USER));
 
             return new ResponseEntity<>(new HomeScreenInfoResponseEntity(user.get().getId(), formattedHomes, entityPath), HttpStatus.OK);
         } else {
@@ -70,11 +70,12 @@ public class GetInfoService {
 
         if (home.isPresent()) {
 
+            EntityPathItem userPath = new EntityPathItem(home.get().getUserEntity().getId(), EntityType.USER);
             EntityPathItem homePath = new EntityPathItem(homeId, EntityType.HOME);
 
             // Generate the home response object.
             return new ResponseEntity<>(new ViewHomeResponseEntity(homeId, home.get().getHomeName(),
-                    formatLocations(homeId), List.of(homePath)), HttpStatus.OK);
+                    formatLocations(homeId), List.of(userPath, homePath)), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -99,9 +100,13 @@ public class GetInfoService {
                 threshold = null;
             }
 
+            EntityPathItem userPath = new EntityPathItem(location.get().getHomeEntity().getUserEntity().getId(), EntityType.USER);
+            EntityPathItem homePath = new EntityPathItem(location.get().getHomeEntity().getId(), EntityType.HOME);
+            EntityPathItem locationPath = new EntityPathItem(location.get().getId(), EntityType.LOCATION);
+
             return new ResponseEntity<>(new ViewLocationResponseEntity(locationId,
                     location.get().getHomeEntity().getId(), location.get().getLocationName(),
-                    formatDevices(locationId), threshold), HttpStatus.OK);
+                    formatDevices(locationId), threshold, List.of(userPath, homePath, locationPath)), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -141,6 +146,13 @@ public class GetInfoService {
                 viewDeviceResponse.setMostRecentTemperatureAvailableDateTime(mostRecentTemperature.getDateRecorded());
                 viewDeviceResponse.setMostRecentTemperatureAvailable(true);
             }
+
+            EntityPathItem userPath = new EntityPathItem(deviceEntity.get().getLocationEntity().getHomeEntity().getUserEntity().getId(), EntityType.USER);
+            EntityPathItem homePath = new EntityPathItem(deviceEntity.get().getLocationEntity().getHomeEntity().getId(), EntityType.HOME);
+            EntityPathItem locationPath = new EntityPathItem(deviceEntity.get().getLocationEntity().getId(), EntityType.LOCATION);
+            EntityPathItem devicePath = new EntityPathItem(deviceEntity.get().getId(), EntityType.DEVICE);
+
+            viewDeviceResponse.setEntityPath(List.of(userPath, homePath, locationPath, devicePath));
 
             return new ResponseEntity<>(viewDeviceResponse, HttpStatus.OK);
         } else {
