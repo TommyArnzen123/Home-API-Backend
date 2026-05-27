@@ -138,13 +138,11 @@ public class GetInfoService {
             viewDeviceResponse.setHomeId(homeId);
             viewDeviceResponse.setAverageTemperaturesByHourCurrentDay(averageHourlyTemperaturesCurrentDay);
 
-            if (mostRecentTemperature == null) {
-                viewDeviceResponse.setMostRecentTemperature(0.0);
-                viewDeviceResponse.setMostRecentTemperatureAvailable(false);
-            } else {
-                viewDeviceResponse.setMostRecentTemperature(mostRecentTemperature.getTemperature());
-                viewDeviceResponse.setMostRecentTemperatureAvailableDateTime(mostRecentTemperature.getDateRecorded());
-                viewDeviceResponse.setMostRecentTemperatureAvailable(true);
+            if (mostRecentTemperature != null) {
+                GetTemperatureResponse tempResponse = new GetTemperatureResponse(mostRecentTemperature.getId(),
+                        mostRecentTemperature.getTemperature(),
+                        mostRecentTemperature.getDateRecorded());
+                viewDeviceResponse.setTemperature(tempResponse);
             }
 
             EntityPathItem userPath = new EntityPathItem(deviceEntity.get().getLocationEntity().getHomeEntity().getUserEntity().getId(), EntityType.USER);
