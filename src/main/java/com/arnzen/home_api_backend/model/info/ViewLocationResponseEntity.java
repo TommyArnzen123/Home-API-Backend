@@ -1,6 +1,8 @@
 package com.arnzen.home_api_backend.model.info;
 
+import com.arnzen.home_api_backend.model.entityPath.EntityPathItem;
 import com.arnzen.home_api_backend.model.reducedData.GetDeviceResponse;
+import com.arnzen.home_api_backend.model.temperature.TemperatureThreshold;
 
 import java.util.List;
 
@@ -10,14 +12,19 @@ public class ViewLocationResponseEntity {
     private int homeId;
     private String locationName;
     private List<GetDeviceResponse> devices;
+    private TemperatureThreshold threshold;
+    private List<EntityPathItem> entityPath;
 
-    public ViewLocationResponseEntity() {}
+    public ViewLocationResponseEntity() {
+    }
 
-    public ViewLocationResponseEntity(int locationId, int homeId, String locationName, List<GetDeviceResponse> devices) {
+    public ViewLocationResponseEntity(int locationId, int homeId, String locationName, List<GetDeviceResponse> devices, TemperatureThreshold threshold, List<EntityPathItem> entityPath) {
         this.locationId = locationId;
         this.homeId = homeId;
         this.locationName = locationName;
         this.devices = devices;
+        this.threshold = threshold;
+        this.entityPath = entityPath;
     }
 
     public int getLocationId() {
@@ -50,5 +57,21 @@ public class ViewLocationResponseEntity {
 
     public void setHomeId(int homeId) {
         this.homeId = homeId;
+    }
+
+    public TemperatureThreshold getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(TemperatureThreshold threshold) {
+        this.threshold = threshold;
+    }
+
+    public List<EntityPathItem> getEntityPath() {
+        return entityPath;
+    }
+
+    public void setEntityPath(List<EntityPathItem> entityPath) {
+        this.entityPath = entityPath;
     }
 }

@@ -1,5 +1,8 @@
 package com.arnzen.home_api_backend.model.info;
 
+import com.arnzen.home_api_backend.model.entityPath.EntityPathItem;
+import com.arnzen.home_api_backend.model.reducedData.GetTemperatureResponse;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,24 +11,23 @@ public class ViewDeviceResponseEntity {
     int locationId;
     int homeId;
     String deviceName;
-    double mostRecentTemperature;
-    LocalDateTime mostRecentTemperatureAvailableDateTime;
-    boolean mostRecentTemperatureAvailable;
+    GetTemperatureResponse temperature;
     List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay;
+    private List<EntityPathItem> entityPath;
 
     public ViewDeviceResponseEntity() {}
 
-    public ViewDeviceResponseEntity(int deviceId, int locationId, int homeId, String deviceName,
-                                    double mostRecentTemperature, LocalDateTime mostRecentTemperatureAvailableDateTime,
-                                    boolean mostRecentTemperatureAvailable, List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay) {
+    public ViewDeviceResponseEntity(int deviceId, int locationId, int homeId,
+                                    String deviceName, GetTemperatureResponse temperature,
+                                    List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay,
+                                    List<EntityPathItem> entityPath) {
         this.deviceId = deviceId;
         this.locationId = locationId;
         this.homeId = homeId;
         this.deviceName = deviceName;
-        this.mostRecentTemperature = mostRecentTemperature;
-        this.mostRecentTemperatureAvailableDateTime = mostRecentTemperatureAvailableDateTime;
-        this.mostRecentTemperatureAvailable = mostRecentTemperatureAvailable;
+        this.temperature = temperature;
         this.averageTemperaturesByHourCurrentDay = averageTemperaturesByHourCurrentDay;
+        this.entityPath = entityPath;
     }
 
     public int getDeviceId() {
@@ -60,14 +62,6 @@ public class ViewDeviceResponseEntity {
         this.deviceName = deviceName;
     }
 
-    public double getMostRecentTemperature() {
-        return mostRecentTemperature;
-    }
-
-    public void setMostRecentTemperature(double mostRecentTemperature) {
-        this.mostRecentTemperature = mostRecentTemperature;
-    }
-
     public List<TemperatureHourlyAverage> getAverageTemperaturesByHourCurrentDay() {
         return averageTemperaturesByHourCurrentDay;
     }
@@ -76,19 +70,19 @@ public class ViewDeviceResponseEntity {
         this.averageTemperaturesByHourCurrentDay = averageTemperaturesByHourCurrentDay;
     }
 
-    public boolean isMostRecentTemperatureAvailable() {
-        return mostRecentTemperatureAvailable;
+    public List<EntityPathItem> getEntityPath() {
+        return entityPath;
     }
 
-    public void setMostRecentTemperatureAvailable(boolean mostRecentTemperatureAvailable) {
-        this.mostRecentTemperatureAvailable = mostRecentTemperatureAvailable;
+    public void setEntityPath(List<EntityPathItem> entityPath) {
+        this.entityPath = entityPath;
     }
 
-    public LocalDateTime getMostRecentTemperatureAvailableDateTime() {
-        return mostRecentTemperatureAvailableDateTime;
+    public GetTemperatureResponse getTemperature() {
+        return temperature;
     }
 
-    public void setMostRecentTemperatureAvailableDateTime(LocalDateTime mostRecentTemperatureAvailableDateTime) {
-        this.mostRecentTemperatureAvailableDateTime = mostRecentTemperatureAvailableDateTime;
+    public void setTemperature(GetTemperatureResponse temperature) {
+        this.temperature = temperature;
     }
 }

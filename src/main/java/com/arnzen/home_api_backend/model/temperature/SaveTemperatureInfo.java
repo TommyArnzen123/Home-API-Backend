@@ -1,29 +1,29 @@
 package com.arnzen.home_api_backend.model.temperature;
 
 public class SaveTemperatureInfo {
-    private int deviceId;
-    private double temperature;
+    private Integer deviceId;
+    private Double temperature;
 
     public SaveTemperatureInfo() {}
 
-    public SaveTemperatureInfo(int deviceId, double temperature) {
+    public SaveTemperatureInfo(Integer deviceId, Double temperature) {
         this.deviceId = deviceId;
         this.temperature = temperature;
     }
 
-    public int getDeviceId() {
+    public Integer getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(int deviceId) {
+    public void setDeviceId(Integer deviceId) {
         this.deviceId = deviceId;
     }
 
-    public double getTemperature() {
+    public Double getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(double temperature) {
+    public void setTemperature(Double temperature) {
         this.temperature = temperature;
     }
 }

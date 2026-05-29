@@ -2,11 +2,11 @@ package com.arnzen.home_api_backend.service;
 
 import com.arnzen.home_api_backend.dao.*;
 import com.arnzen.home_api_backend.model.base.*;
+import com.arnzen.home_api_backend.model.entityPath.EntityPathItem;
+import com.arnzen.home_api_backend.model.entityPath.EntityType;
 import com.arnzen.home_api_backend.model.info.*;
-import com.arnzen.home_api_backend.model.reducedData.GetDeviceResponse;
-import com.arnzen.home_api_backend.model.reducedData.GetHomeResponse;
-import com.arnzen.home_api_backend.model.reducedData.GetLocationResponse;
-import com.arnzen.home_api_backend.model.reducedData.GetTemperatureResponse;
+import com.arnzen.home_api_backend.model.reducedData.*;
+import com.arnzen.home_api_backend.model.temperature.TemperatureThreshold;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +56,9 @@ public class GetInfoService {
                 formattedHomes.add(new GetHomeResponse(home.getId(), userId, home.getHomeName(), totalLocations, totalDevices));
             };
 
-            return new ResponseEntity<>(new HomeScreenInfoResponseEntity(user.get().getId(), formattedHomes), HttpStatus.OK);
+            List<EntityPathItem> entityPath = List.of(new EntityPathItem(user.get().getId(), EntityType.USER));
+
+            return new ResponseEntity<>(new HomeScreenInfoResponseEntity(user.get().getId(), formattedHomes, entityPath), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -67,9 +70,12 @@ public class GetInfoService {
 
         if (home.isPresent()) {
 
+            EntityPathItem userPath = new EntityPathItem(home.get().getUserEntity().getId(), EntityType.USER);
+            EntityPathItem homePath = new EntityPathItem(homeId, EntityType.HOME);
+
             // Generate the home response object.
             return new ResponseEntity<>(new ViewHomeResponseEntity(homeId, home.get().getHomeName(),
-                    formatLocations(homeId)), HttpStatus.OK);
+                    formatLocations(homeId), List.of(userPath, homePath)), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -82,9 +88,25 @@ public class GetInfoService {
 
         if (location.isPresent()) {
 
+            TemperatureThreshold threshold =
+                    new TemperatureThreshold();
+
+            if (location.get().getTemperatureThresholdEntity() != null) {
+                threshold.setId(location.get().getTemperatureThresholdEntity().getId());
+                threshold.setMinimumTemperature(location.get().getTemperatureThresholdEntity().getMinimumTemperature());
+                threshold.setMaximumTemperature(location.get().getTemperatureThresholdEntity().getMaximumTemperature());
+                threshold.setLocationId(location.get().getTemperatureThresholdEntity().getLocationEntity().getId());
+            } else {
+                threshold = null;
+            }
+
+            EntityPathItem userPath = new EntityPathItem(location.get().getHomeEntity().getUserEntity().getId(), EntityType.USER);
+            EntityPathItem homePath = new EntityPathItem(location.get().getHomeEntity().getId(), EntityType.HOME);
+            EntityPathItem locationPath = new EntityPathItem(location.get().getId(), EntityType.LOCATION);
+
             return new ResponseEntity<>(new ViewLocationResponseEntity(locationId,
                     location.get().getHomeEntity().getId(), location.get().getLocationName(),
-                    formatDevices(locationId)), HttpStatus.OK);
+                    formatDevices(locationId), threshold, List.of(userPath, homePath, locationPath)), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -116,14 +138,19 @@ public class GetInfoService {
             viewDeviceResponse.setHomeId(homeId);
             viewDeviceResponse.setAverageTemperaturesByHourCurrentDay(averageHourlyTemperaturesCurrentDay);
 
-            if (mostRecentTemperature == null) {
-                viewDeviceResponse.setMostRecentTemperature(0.0);
-                viewDeviceResponse.setMostRecentTemperatureAvailable(false);
-            } else {
-                viewDeviceResponse.setMostRecentTemperature(mostRecentTemperature.getTemperature());
-                viewDeviceResponse.setMostRecentTemperatureAvailableDateTime(mostRecentTemperature.getDateRecorded());
-                viewDeviceResponse.setMostRecentTemperatureAvailable(true);
+            if (mostRecentTemperature != null) {
+                GetTemperatureResponse tempResponse = new GetTemperatureResponse(mostRecentTemperature.getId(),
+                        mostRecentTemperature.getTemperature(),
+                        mostRecentTemperature.getDateRecorded());
+                viewDeviceResponse.setTemperature(tempResponse);
             }
+
+            EntityPathItem userPath = new EntityPathItem(deviceEntity.get().getLocationEntity().getHomeEntity().getUserEntity().getId(), EntityType.USER);
+            EntityPathItem homePath = new EntityPathItem(deviceEntity.get().getLocationEntity().getHomeEntity().getId(), EntityType.HOME);
+            EntityPathItem locationPath = new EntityPathItem(deviceEntity.get().getLocationEntity().getId(), EntityType.LOCATION);
+            EntityPathItem devicePath = new EntityPathItem(deviceEntity.get().getId(), EntityType.DEVICE);
+
+            viewDeviceResponse.setEntityPath(List.of(userPath, homePath, locationPath, devicePath));
 
             return new ResponseEntity<>(viewDeviceResponse, HttpStatus.OK);
         } else {
@@ -141,7 +168,21 @@ public class GetInfoService {
             locationResponse.setLocationId(location.getId());
             locationResponse.setHomeId(location.getHomeEntity().getId());
             locationResponse.setLocationName(location.getLocationName());
-            locationResponse.setDevices(formatDevices(location.getId()));
+            locationResponse.setNumDevices(location.getDevices().size());
+            locationResponse.setAverageTemperature(getAverageLocationTemperature(location.getDevices()));
+
+
+            if (location.getTemperatureThresholdEntity() != null) {
+                TemperatureThreshold threshold =
+                        new TemperatureThreshold(
+                                location.getTemperatureThresholdEntity().getId(),
+                                location.getTemperatureThresholdEntity().getMinimumTemperature(),
+                                location.getTemperatureThresholdEntity().getMaximumTemperature(),
+                                location.getTemperatureThresholdEntity().getLocationEntity().getId());
+                locationResponse.setThreshold(threshold);
+            } else {
+                locationResponse.setThreshold(null);
+            }
             formattedLocations.add(locationResponse);
         });
 
@@ -168,5 +209,29 @@ public class GetInfoService {
         });
 
         return formattedDevices;
+    }
+
+    public Double getAverageLocationTemperature(List<DeviceEntity> devices) {
+        Double averageTemperature = null;
+        int totalTemperatures = 0;
+
+        for (DeviceEntity device : devices) {
+            TemperatureEntity mostRecentTemperature = temperatureDao.getMostRecentTemperatureByDeviceId(device.getId(), LocalDateTime.now().minusMinutes(10));
+
+            if (mostRecentTemperature != null) {
+                if (averageTemperature != null) {
+                    averageTemperature += mostRecentTemperature.getTemperature();   // Average temperature is set. Add to the set average temperature.
+                } else {
+                    averageTemperature = mostRecentTemperature.getTemperature();    // Average temperature is not set. Set the average temperature.
+                }
+                totalTemperatures++;
+            }
+        }
+
+        if (averageTemperature != null) {
+            return averageTemperature / totalTemperatures;
+        } else {
+            return averageTemperature;
+        }
     }
 }

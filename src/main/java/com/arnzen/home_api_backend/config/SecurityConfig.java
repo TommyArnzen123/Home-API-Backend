@@ -65,6 +65,8 @@ public class SecurityConfig {
 								"getInfo/viewHomeInfo/*",
 								"getInfo/viewLocationInfo/*",
 								"getInfo/informationByDeviceCurrentDay/*",
+								"temperatureThreshold",
+								"temperatureThreshold/*",
 								"delete/home/*",
 								"delete/location/*",
 								"delete/device/*")

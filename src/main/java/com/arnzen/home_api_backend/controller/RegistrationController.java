@@ -1,7 +1,7 @@
 package com.arnzen.home_api_backend.controller;
 
 import com.arnzen.home_api_backend.model.registration.RegisterItem;
-import com.arnzen.home_api_backend.model.registration.RegistrationResponse;
+import com.arnzen.home_api_backend.model.messageResponse.MessageResponse;
 import com.arnzen.home_api_backend.model.base.UserEntity;
 
 import com.arnzen.home_api_backend.service.RegistrationService;
@@ -23,25 +23,25 @@ public class RegistrationController {
 
     // Allow a new user to be registered with the application.
     @PostMapping("user")
-    public ResponseEntity<RegistrationResponse> registerUser(@RequestBody UserEntity user) {
+    public ResponseEntity<MessageResponse> registerUser(@RequestBody UserEntity user) {
         return registrationService.registerUser(user);
     }
 
     // Allow a new home to be registered and associated with a registered user.
     @PostMapping("home")
-    public ResponseEntity<RegistrationResponse> registerHome(@RequestBody RegisterItem home) {
+    public ResponseEntity<MessageResponse> registerHome(@RequestBody RegisterItem home) {
         return registrationService.registerHome(home);
     }
 
     // Allow a new location to be registered and associated with a registered home.
     @PostMapping("location")
-    public ResponseEntity<RegistrationResponse> registerLocation(@RequestBody RegisterItem location) {
+    public ResponseEntity<MessageResponse> registerLocation(@RequestBody RegisterItem location) {
         return registrationService.registerLocation(location);
     }
 
     // Allow a new device to be registered and associated with a registered location.
     @PostMapping("device")
-    public ResponseEntity<RegistrationResponse> registerDevice(@RequestBody RegisterItem device) {
+    public ResponseEntity<MessageResponse> registerDevice(@RequestBody RegisterItem device) {
         return registrationService.registerDevice(device);
     }
 }
