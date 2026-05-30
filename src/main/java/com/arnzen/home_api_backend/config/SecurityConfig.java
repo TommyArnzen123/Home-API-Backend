@@ -69,7 +69,8 @@ public class SecurityConfig {
 								"temperatureThreshold/*",
 								"delete/home/*",
 								"delete/location/*",
-								"delete/device/*")
+								"delete/device/*",
+								"edit/*")
 						.permitAll()
 						.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

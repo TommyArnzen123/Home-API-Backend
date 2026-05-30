@@ -20,6 +20,9 @@ public class GetInfoController {
     @Autowired
     GetInfoService getInfoService;
 
+    // DOCUMENT: The ordering of the entityPath array matters as the breadcrumb component in the
+    // frontend application relies on the ordering when rendering the items in the hierarchy.
+
     // Get the required information for the main screen (home screen).
     @GetMapping("homeScreenInfo/{userId}")
     public ResponseEntity<HomeScreenInfoResponseEntity> getHomeScreenInfo(@PathVariable int userId) {

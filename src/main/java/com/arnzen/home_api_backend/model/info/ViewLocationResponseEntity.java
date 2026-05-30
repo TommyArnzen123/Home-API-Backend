@@ -13,7 +13,7 @@ public class ViewLocationResponseEntity {
     private String locationName;
     private List<GetDeviceResponse> devices;
     private TemperatureThreshold threshold;
-    private List<EntityPathItem> entityPath;
+    private List<EntityPathItem> entityPath; // Ordering of entity path matters (User, Home, Location)
 
     public ViewLocationResponseEntity() {
     }

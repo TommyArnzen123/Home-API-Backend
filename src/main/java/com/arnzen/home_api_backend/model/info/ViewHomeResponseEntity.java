@@ -10,7 +10,7 @@ public class ViewHomeResponseEntity {
     private int homeId;
     private String homeName;
     private List<GetLocationResponse> locations;
-    private List<EntityPathItem> entityPath;
+    private List<EntityPathItem> entityPath; // Ordering of entity path matters (User, Home)
 
     public ViewHomeResponseEntity() {
     }

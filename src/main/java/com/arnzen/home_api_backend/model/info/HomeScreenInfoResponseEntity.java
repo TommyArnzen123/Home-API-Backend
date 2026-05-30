@@ -9,7 +9,7 @@ public class HomeScreenInfoResponseEntity {
 
     private int userId;
     private List<GetHomeResponse> homes;
-    private List<EntityPathItem> entityPath;
+    private List<EntityPathItem> entityPath;    // Ordering of entity path matters (User)
 
     public HomeScreenInfoResponseEntity() {
     }

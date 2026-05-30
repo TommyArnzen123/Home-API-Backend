@@ -13,7 +13,7 @@ public class ViewDeviceResponseEntity {
     String deviceName;
     GetTemperatureResponse temperature;
     List<TemperatureHourlyAverage> averageTemperaturesByHourCurrentDay;
-    private List<EntityPathItem> entityPath;
+    private List<EntityPathItem> entityPath;    // Ordering of entity path matters (User, Home, Location, Device)
 
     public ViewDeviceResponseEntity() {}
 
