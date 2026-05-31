@@ -22,7 +22,13 @@ public class EditController {
 
     // Updates the information of the specified home.
     @PutMapping("home")
-    public ResponseEntity<MessageResponse> registerHome(@RequestBody EditRequest home) {
+    public ResponseEntity<MessageResponse> editHome(@RequestBody EditRequest home) {
         return editService.editHome(home);
+    }
+
+    // Updates the information of the specified location.
+    @PutMapping("location")
+    public ResponseEntity<MessageResponse> editLocation(@RequestBody EditRequest location) {
+        return editService.editLocation(location);
     }
 }
