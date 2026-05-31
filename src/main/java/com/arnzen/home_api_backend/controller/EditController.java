@@ -31,4 +31,10 @@ public class EditController {
     public ResponseEntity<MessageResponse> editLocation(@RequestBody EditRequest location) {
         return editService.editLocation(location);
     }
+
+    // Updates the information of the specified device.
+    @PutMapping("device")
+    public ResponseEntity<MessageResponse> editDevice(@RequestBody EditRequest device) {
+        return editService.editDevice(device);
+    }
 }

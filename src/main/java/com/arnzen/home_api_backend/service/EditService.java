@@ -1,7 +1,9 @@
 package com.arnzen.home_api_backend.service;
 
+import com.arnzen.home_api_backend.dao.DeviceDao;
 import com.arnzen.home_api_backend.dao.HomeDao;
 import com.arnzen.home_api_backend.dao.LocationDao;
+import com.arnzen.home_api_backend.model.base.DeviceEntity;
 import com.arnzen.home_api_backend.model.base.HomeEntity;
 import com.arnzen.home_api_backend.model.base.LocationEntity;
 import com.arnzen.home_api_backend.model.edit.EditRequest;
@@ -22,6 +24,9 @@ public class EditService {
 
     @Autowired
     LocationDao locationDao;
+
+    @Autowired
+    DeviceDao deviceDao;
 
     @Transactional
     public ResponseEntity<MessageResponse> editHome(EditRequest home) throws EmptyResultDataAccessException {
@@ -68,5 +73,30 @@ public class EditService {
             // The specified location was not found. Return an error.
             return new ResponseEntity<>(new MessageResponse("Location not found."), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @Transactional
+    public ResponseEntity<MessageResponse> editDevice(EditRequest device) throws EmptyResultDataAccessException {
+
+        try {
+            Optional<DeviceEntity> deviceEntity = deviceDao.findById(device.getEntityId());
+
+            if (deviceEntity.isPresent()) {
+
+                deviceEntity.get().setDeviceName(device.getName());
+                deviceDao.save(deviceEntity.get());
+
+                return new ResponseEntity<>(new MessageResponse("Device Edited."), HttpStatus.OK);
+
+            } else {
+                // The specified device was not found. Return an error.
+                return new ResponseEntity<>(new MessageResponse("Device not found."), HttpStatus.NOT_FOUND);
+            }
+
+        } catch (EmptyResultDataAccessException exception) {
+            // The specified device was not found. Return an error.
+            return new ResponseEntity<>(new MessageResponse("Device not found."), HttpStatus.NOT_FOUND);
+        }
+
     }
 }
