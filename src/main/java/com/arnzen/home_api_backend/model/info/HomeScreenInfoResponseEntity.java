@@ -8,14 +8,16 @@ import java.util.List;
 public class HomeScreenInfoResponseEntity {
 
     private int userId;
+    private boolean emailConfirmed;
     private List<GetHomeResponse> homes;
     private List<EntityPathItem> entityPath;    // Ordering of entity path matters (User)
 
     public HomeScreenInfoResponseEntity() {
     }
 
-    public HomeScreenInfoResponseEntity(int userId, List<GetHomeResponse> homes, List<EntityPathItem> entityPath) {
+    public HomeScreenInfoResponseEntity(int userId, boolean emailConfirmed, List<GetHomeResponse> homes, List<EntityPathItem> entityPath) {
         this.userId = userId;
+        this.emailConfirmed = emailConfirmed;
         this.homes = homes;
         this.entityPath = entityPath;
     }
@@ -42,5 +44,13 @@ public class HomeScreenInfoResponseEntity {
 
     public void setEntityPath(List<EntityPathItem> entityPath) {
         this.entityPath = entityPath;
+    }
+
+    public boolean isEmailConfirmed() {
+        return emailConfirmed;
+    }
+
+    public void setEmailConfirmed(boolean emailConfirmed) {
+        this.emailConfirmed = emailConfirmed;
     }
 }

@@ -58,7 +58,7 @@ public class GetInfoService {
 
             List<EntityPathItem> entityPath = List.of(new EntityPathItem(user.get().getId(), EntityType.USER));
 
-            return new ResponseEntity<>(new HomeScreenInfoResponseEntity(user.get().getId(), formattedHomes, entityPath), HttpStatus.OK);
+            return new ResponseEntity<>(new HomeScreenInfoResponseEntity(user.get().getId(), user.get().isEmailConfirmed(), formattedHomes, entityPath), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }

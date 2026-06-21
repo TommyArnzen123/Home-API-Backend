@@ -10,6 +10,7 @@ import com.arnzen.home_api_backend.model.messageResponse.MessageResponse;
 import com.arnzen.home_api_backend.model.base.UserEntity;
 import com.arnzen.home_api_backend.model.base.LocationEntity;
 import com.arnzen.home_api_backend.model.base.DeviceEntity;
+import com.arnzen.home_api_backend.service.notification.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,28 +33,43 @@ public class RegistrationService {
     @Autowired
     DeviceDao deviceDao;
 
+    @Autowired
+    EmailService emailService;
+
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public ResponseEntity<MessageResponse> registerUser(UserEntity user) {
 
         // Get the username entered by the user.
-        String normalizedUser = user.getUsername().toLowerCase();
+        String normalizedUsername = user.getUsername().toLowerCase();
 
         // Check if the username is already in the database.
-        UserEntity checkUser = userDao.findByUsernameIgnoreCase(normalizedUser);
+        boolean usernameExists = userDao.existsByUsernameIgnoreCase(normalizedUsername);
 
-        if (checkUser != null) {
+        if (usernameExists) {
 
-            // If the username is already in the database, return
-            // an error response.
-            return new ResponseEntity<>(generateRegistrationResponse("Error adding user."), HttpStatus.CONFLICT);
+            // If the username is already in the database, return an error response.
+            return new ResponseEntity<>(generateRegistrationResponse("Error registering user."), HttpStatus.CONFLICT);
+        }
+
+        // Check if the email address is already in the database.
+        boolean emailExists = userDao.existsByEmailIgnoreCase(user.getEmail().toLowerCase());
+
+        if (emailExists) {
+
+            // If the email address is already associated with an account, return an error.
+            return new ResponseEntity<>(generateRegistrationResponse("Error registering user."), HttpStatus.CONFLICT);
         }
 
         // Encode the password entered by the user.
         user.setPassword(encoder.encode(user.getPassword()));
 
         // Save the new user object in the database.
-        userDao.save(user);
+        UserEntity newlyRegisteredUser = userDao.save(user);
+
+        // Send the user registration email.
+//        emailService.sendUserRegistrationEmail(newlyRegisteredUser);
+
         return new ResponseEntity<>(generateRegistrationResponse("User added successfully."), HttpStatus.OK);
     }
 
