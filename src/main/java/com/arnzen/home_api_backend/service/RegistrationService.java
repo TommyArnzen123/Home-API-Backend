@@ -1,15 +1,11 @@
 package com.arnzen.home_api_backend.service;
 
-import com.arnzen.home_api_backend.dao.HomeDao;
-import com.arnzen.home_api_backend.dao.UserDao;
-import com.arnzen.home_api_backend.dao.LocationDao;
-import com.arnzen.home_api_backend.dao.DeviceDao;
-import com.arnzen.home_api_backend.model.base.HomeEntity;
+import com.arnzen.home_api_backend.dao.*;
+import com.arnzen.home_api_backend.model.accountSettings.TemperatureDisplayOptions;
+import com.arnzen.home_api_backend.model.accountSettings.TimeDisplayOptions;
+import com.arnzen.home_api_backend.model.base.*;
 import com.arnzen.home_api_backend.model.registration.RegisterItem;
 import com.arnzen.home_api_backend.model.messageResponse.MessageResponse;
-import com.arnzen.home_api_backend.model.base.UserEntity;
-import com.arnzen.home_api_backend.model.base.LocationEntity;
-import com.arnzen.home_api_backend.model.base.DeviceEntity;
 import com.arnzen.home_api_backend.service.notification.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +31,9 @@ public class RegistrationService {
 
     @Autowired
     EmailService emailService;
+
+    @Autowired
+    AccountSettingsDao accountSettingsDao;
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
@@ -66,6 +65,15 @@ public class RegistrationService {
 
         // Save the new user object in the database.
         UserEntity newlyRegisteredUser = userDao.save(user);
+
+        // Generate a new account settings entity with default settings.
+        AccountSettingsEntity settings = new AccountSettingsEntity(
+                newlyRegisteredUser,
+                TimeDisplayOptions.HOUR_12,
+                TemperatureDisplayOptions.FAHRENHEIT);
+
+        // Save the default account settings for the new user.
+        accountSettingsDao.save(settings);
 
         // Send the user registration email.
 //        emailService.sendUserRegistrationEmail(newlyRegisteredUser);
