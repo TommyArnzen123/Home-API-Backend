@@ -73,7 +73,8 @@ public class SecurityConfig {
 								"edit/*",
 								"confirmEmail/generateEmailConfirmationCode/*",
 								"confirmEmail/confirmCode",
-								"accountSettings/*")
+								"accountSettings/*",
+								"accountSettings/getSettings/*")
 						.permitAll()
 						.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
