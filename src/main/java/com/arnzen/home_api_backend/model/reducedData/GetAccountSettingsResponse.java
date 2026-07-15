@@ -1,6 +1,7 @@
 package com.arnzen.home_api_backend.model.reducedData;
 
 import com.arnzen.home_api_backend.model.accountSettings.TemperatureDisplayOptions;
+import com.arnzen.home_api_backend.model.accountSettings.ThemeDisplayOptions;
 import com.arnzen.home_api_backend.model.accountSettings.TimeDisplayOptions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,4 +17,5 @@ public class GetAccountSettingsResponse {
     private Integer userId;
     private TimeDisplayOptions timeDisplaySetting;
     private TemperatureDisplayOptions temperatureDisplaySetting;
+    private ThemeDisplayOptions themeDisplaySetting;
 }

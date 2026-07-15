@@ -44,6 +44,7 @@ public class LoginService {
             accountSettings.setUserId(userEntity.getId());
             accountSettings.setTimeDisplaySetting(userEntity.getAccountSettingsEntity().getTimeDisplaySetting());
             accountSettings.setTemperatureDisplaySetting(userEntity.getAccountSettingsEntity().getTemperatureDisplaySetting());
+            accountSettings.setThemeDisplaySetting(userEntity.getAccountSettingsEntity().getThemeDisplaySetting());
 
 
             LoginResponse loginResponse =

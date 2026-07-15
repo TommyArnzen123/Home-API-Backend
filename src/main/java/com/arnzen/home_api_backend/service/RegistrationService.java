@@ -2,6 +2,7 @@ package com.arnzen.home_api_backend.service;
 
 import com.arnzen.home_api_backend.dao.*;
 import com.arnzen.home_api_backend.model.accountSettings.TemperatureDisplayOptions;
+import com.arnzen.home_api_backend.model.accountSettings.ThemeDisplayOptions;
 import com.arnzen.home_api_backend.model.accountSettings.TimeDisplayOptions;
 import com.arnzen.home_api_backend.model.base.*;
 import com.arnzen.home_api_backend.model.registration.RegisterItem;
@@ -70,7 +71,8 @@ public class RegistrationService {
         AccountSettingsEntity settings = new AccountSettingsEntity(
                 newlyRegisteredUser,
                 TimeDisplayOptions.HOUR_12,
-                TemperatureDisplayOptions.FAHRENHEIT);
+                TemperatureDisplayOptions.FAHRENHEIT,
+                ThemeDisplayOptions.LIGHT);
 
         // Save the default account settings for the new user.
         accountSettingsDao.save(settings);

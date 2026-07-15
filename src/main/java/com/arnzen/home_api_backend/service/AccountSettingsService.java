@@ -3,10 +3,12 @@ package com.arnzen.home_api_backend.service;
 import com.arnzen.home_api_backend.dao.AccountSettingsDao;
 import com.arnzen.home_api_backend.globalExceptionHandler.customErrors.accountSettings.AccountSettingsException;
 import com.arnzen.home_api_backend.model.accountSettings.UpdateTemperatureDisplaySettingRequest;
+import com.arnzen.home_api_backend.model.accountSettings.UpdateThemeDisplaySettingRequest;
 import com.arnzen.home_api_backend.model.accountSettings.UpdateTimeDisplaySettingRequest;
 import com.arnzen.home_api_backend.model.base.AccountSettingsEntity;
 import com.arnzen.home_api_backend.model.reducedData.GetAccountSettingsResponse;
 import com.arnzen.home_api_backend.model.reducedData.UpdateTemperatureDisplaySettingResponse;
+import com.arnzen.home_api_backend.model.reducedData.UpdateThemeDisplaySettingResponse;
 import com.arnzen.home_api_backend.model.reducedData.UpdateTimeDisplaySettingResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,8 @@ public class AccountSettingsService {
                     accountSettings.get().getId(),
                     accountSettings.get().getUserEntity().getId(),
                     accountSettings.get().getTimeDisplaySetting(),
-                    accountSettings.get().getTemperatureDisplaySetting()
+                    accountSettings.get().getTemperatureDisplaySetting(),
+                    accountSettings.get().getThemeDisplaySetting()
             );
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
@@ -76,7 +79,7 @@ public class AccountSettingsService {
             }
 
         } catch (AccountSettingsException exception) {
-            throw exception;    // Throw any UpdateSettingExceptions to the Global Error Handler.
+            throw exception;    // Throw any AccountSettingsExceptions to the Global Error Handler.
         } catch (Exception exception) {
             throw new AccountSettingsException(timeDisplayExceptionMessage);
         }
@@ -99,7 +102,7 @@ public class AccountSettingsService {
                 // Save the temperature display setting for the specified user.
                 AccountSettingsEntity savedEntity = accountSettingsDao.save(accountSettingsEntity.get());
 
-                // Generate a new time display setting response.
+                // Generate a new temperature display setting response.
                 UpdateTemperatureDisplaySettingResponse response =
                         new UpdateTemperatureDisplaySettingResponse(
                                 savedEntity.getUserEntity().getId(),
@@ -114,9 +117,47 @@ public class AccountSettingsService {
                 throw new AccountSettingsException(temperatureDisplayExceptionMessage);
             }
         } catch (AccountSettingsException exception) {
-            throw exception;    // Throw any UpdateSettingExceptions to the Global Error Handler.
+            throw exception;    // Throw any AccountSettingsExceptions to the Global Error Handler.
         } catch (Exception exception) {
             throw new AccountSettingsException(temperatureDisplayExceptionMessage);
+        }
+    }
+
+    @Transactional
+    public ResponseEntity<UpdateThemeDisplaySettingResponse> updateThemeDisplaySetting(
+            UpdateThemeDisplaySettingRequest themeDisplayRequest) {
+        String themeDisplayExceptionMessage = "There was an error updating the theme display setting.";
+        try {
+            Optional<AccountSettingsEntity> accountSettingsEntity
+                    = accountSettingsDao.findByUserEntityId(themeDisplayRequest.getUserId());
+
+            // The specified account settings entity exists.
+            if (accountSettingsEntity.isPresent()) {
+
+                // Update the theme display setting for the specified user.
+                accountSettingsEntity.get().setThemeDisplaySetting(themeDisplayRequest.getSetting());
+
+                // Save the theme display setting for the specified user.
+                AccountSettingsEntity savedEntity = accountSettingsDao.save(accountSettingsEntity.get());
+
+                // Generate a new theme display setting response.
+                UpdateThemeDisplaySettingResponse response =
+                        new UpdateThemeDisplaySettingResponse(
+                                savedEntity.getUserEntity().getId(),
+                                savedEntity.getId(),
+                                savedEntity.getThemeDisplaySetting()
+                        );
+
+                return new ResponseEntity<>(response, HttpStatus.OK);
+
+            } else {
+                // The specified account settings entity was not found. Return an error.
+                throw new AccountSettingsException(themeDisplayExceptionMessage);
+            }
+        } catch (AccountSettingsException exception) {
+            throw exception;    // Throw any AccountSettingsExceptions to the Global Error Handler.
+        } catch (Exception exception) {
+            throw new AccountSettingsException(themeDisplayExceptionMessage);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.arnzen.home_api_backend.model.base;
 
 import com.arnzen.home_api_backend.model.accountSettings.TemperatureDisplayOptions;
+import com.arnzen.home_api_backend.model.accountSettings.ThemeDisplayOptions;
 import com.arnzen.home_api_backend.model.accountSettings.TimeDisplayOptions;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,9 +34,19 @@ public class AccountSettingsEntity {
     @Column(nullable = false)
     private TemperatureDisplayOptions temperatureDisplaySetting = TemperatureDisplayOptions.FAHRENHEIT;
 
-    public AccountSettingsEntity(UserEntity userEntity, TimeDisplayOptions timeDisplaySetting, TemperatureDisplayOptions temperatureDisplaySetting) {
+    // Default to light theme display.
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ThemeDisplayOptions themeDisplaySetting = ThemeDisplayOptions.LIGHT;
+
+
+    public AccountSettingsEntity(UserEntity userEntity,
+                                 TimeDisplayOptions timeDisplaySetting,
+                                 TemperatureDisplayOptions temperatureDisplaySetting,
+                                 ThemeDisplayOptions themeDisplaySetting) {
         this.userEntity = userEntity;
         this.timeDisplaySetting = timeDisplaySetting;
         this.temperatureDisplaySetting = temperatureDisplaySetting;
+        this.themeDisplaySetting = themeDisplaySetting;
     }
 }

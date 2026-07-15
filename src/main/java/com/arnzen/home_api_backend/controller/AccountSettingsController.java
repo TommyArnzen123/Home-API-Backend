@@ -1,10 +1,12 @@
 package com.arnzen.home_api_backend.controller;
 
 import com.arnzen.home_api_backend.model.accountSettings.UpdateTemperatureDisplaySettingRequest;
+import com.arnzen.home_api_backend.model.accountSettings.UpdateThemeDisplaySettingRequest;
 import com.arnzen.home_api_backend.model.accountSettings.UpdateTimeDisplaySettingRequest;
 import com.arnzen.home_api_backend.model.messageResponse.MessageResponse;
 import com.arnzen.home_api_backend.model.reducedData.GetAccountSettingsResponse;
 import com.arnzen.home_api_backend.model.reducedData.UpdateTemperatureDisplaySettingResponse;
+import com.arnzen.home_api_backend.model.reducedData.UpdateThemeDisplaySettingResponse;
 import com.arnzen.home_api_backend.model.reducedData.UpdateTimeDisplaySettingResponse;
 import com.arnzen.home_api_backend.service.AccountSettingsService;
 import jakarta.validation.Valid;
@@ -38,6 +40,11 @@ public class AccountSettingsController {
     @PutMapping("temperatureDisplay")
     public ResponseEntity<UpdateTemperatureDisplaySettingResponse> updateTemperatureDisplaySetting(@Valid @RequestBody UpdateTemperatureDisplaySettingRequest temperatureDisplayRequest) {
         return accountSettingsService.updateTemperatureDisplaySetting(temperatureDisplayRequest);
+    }
+
+    @PutMapping("themeDisplay")
+    public ResponseEntity<UpdateThemeDisplaySettingResponse> updateThemeDisplaySetting(@Valid @RequestBody UpdateThemeDisplaySettingRequest themeDisplayRequest) {
+        return accountSettingsService.updateThemeDisplaySetting(themeDisplayRequest);
     }
 
     // Exception handling.
