@@ -3,6 +3,8 @@ package com.arnzen.home_api_backend.service;
 import com.arnzen.home_api_backend.model.base.UserEntity;
 import com.arnzen.home_api_backend.model.login.LoginResponse;
 import com.arnzen.home_api_backend.model.login.LoginUserInfo;
+import com.arnzen.home_api_backend.model.reducedData.GetAccountSettingsResponse;
+import com.arnzen.home_api_backend.model.reducedData.GetUserInfoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +33,24 @@ public class LoginService {
         if(authentication.isAuthenticated()) {
             UserEntity userEntity = getInfoService.getUserEntityByUsername(loginUserInfo.getUsername());
 
+            // Get the user info.
+            GetUserInfoResponse userInfo = new GetUserInfoResponse();
+            userInfo.setUserId(userEntity.getId());
+            userInfo.setFirstName(userEntity.getFirstName());
+
+            // Get the account settings for the user's account.
+            GetAccountSettingsResponse accountSettings = new GetAccountSettingsResponse();
+            accountSettings.setAccountSettingId(userEntity.getAccountSettingsEntity().getId());
+            accountSettings.setUserId(userEntity.getId());
+            accountSettings.setTimeDisplaySetting(userEntity.getAccountSettingsEntity().getTimeDisplaySetting());
+            accountSettings.setTemperatureDisplaySetting(userEntity.getAccountSettingsEntity().getTemperatureDisplaySetting());
+            accountSettings.setThemeDisplaySetting(userEntity.getAccountSettingsEntity().getThemeDisplaySetting());
+
+
             LoginResponse loginResponse =
-                    new LoginResponse(userEntity.getId(),
-                            userEntity.getUsername(),
-                            userEntity.getFirstName(),
-                            jwtService.generateToken(loginUserInfo.getUsername()));
+                    new LoginResponse(userInfo,
+                            jwtService.generateToken(loginUserInfo.getUsername()),
+                            accountSettings);
             return new ResponseEntity<>(loginResponse, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

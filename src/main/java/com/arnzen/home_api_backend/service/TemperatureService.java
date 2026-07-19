@@ -34,6 +34,10 @@ public class TemperatureService {
         Double temperatureValue = saveTemperatureInfo.getTemperature();
 
         if (deviceId != null && temperatureValue != null) {
+
+            // Round the temperature value to two decimal points.
+            temperatureValue = Math.round(saveTemperatureInfo.getTemperature() * 100.0) / 100.0;
+
             Optional<DeviceEntity> device = deviceDao.findById(deviceId);
 
             if (device.isPresent()) {

@@ -72,7 +72,9 @@ public class SecurityConfig {
 								"delete/device/*",
 								"edit/*",
 								"confirmEmail/generateEmailConfirmationCode/*",
-								"confirmEmail/confirmCode")
+								"confirmEmail/confirmCode",
+								"accountSettings/*",
+								"accountSettings/getSettings/*")
 						.permitAll()
 						.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

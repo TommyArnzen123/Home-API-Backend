@@ -8,7 +8,7 @@ public class TemperatureHourlyAverage {
 
     public TemperatureHourlyAverage(int hour, double averageTemperature) {
         this.hour = hour;
-        this.averageTemperature = averageTemperature;
+        this.averageTemperature = Math.round(averageTemperature * 100.0) / 100.0;
     }
 
     public int getHour() {

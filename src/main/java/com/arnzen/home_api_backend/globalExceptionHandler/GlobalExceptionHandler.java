@@ -6,6 +6,8 @@ import com.arnzen.home_api_backend.globalExceptionHandler.customErrors.emailConf
 import com.arnzen.home_api_backend.globalExceptionHandler.customErrors.emailConfirmation.generateCode.GenerateCodeError;
 import com.arnzen.home_api_backend.globalExceptionHandler.customErrors.emailConfirmation.generateCode.GenerateCodeErrorTypes;
 import com.arnzen.home_api_backend.globalExceptionHandler.customErrors.emailConfirmation.generateCode.GenerateCodeException;
+import com.arnzen.home_api_backend.globalExceptionHandler.customErrors.accountSettings.AccountSettingsError;
+import com.arnzen.home_api_backend.globalExceptionHandler.customErrors.accountSettings.AccountSettingsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -50,5 +52,15 @@ public class GlobalExceptionHandler {
                         : HttpStatus.BAD_REQUEST;
 
         return new ResponseEntity<>(error, status);
+    }
+
+    @ExceptionHandler(AccountSettingsException.class)
+    public ResponseEntity<AccountSettingsError> handleAccountSettingsError(
+            AccountSettingsException ex, WebRequest request
+    ) {
+        AccountSettingsError error = new AccountSettingsError();
+        error.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }
